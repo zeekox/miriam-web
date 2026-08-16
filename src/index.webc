@@ -4,17 +4,7 @@ layout_variant: cover
 title: null
 eleventyExcludeFromCollections: true
 ---
-<!--
-  Every page needs exactly one h1. The cover is all image by design, so this one
-  is visually hidden rather than omitted — without it the home page has no
-  heading at all, and a screen reader user arrives with nothing to orient by.
--->
 <h1 class="visually-hidden" @text="this.site.title"></h1>
-
-<!--
-  The garden is the empty state: with no works published yet there is nothing to
-  put on a cover, and a blank screen would be worse than a drawing.
--->
 <cover-slideshow webc:if="this.collections.works.length"
                  :@works="this.collections.works"></cover-slideshow>
 <garden-scene webc:else></garden-scene>

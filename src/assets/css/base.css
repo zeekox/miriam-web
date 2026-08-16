@@ -1,17 +1,5 @@
-/*
-  base.css — structural only.
-
-  There is no colour, type scale, or spacing system in this file, and there should
-  not be. It declares the cascade layer order for the whole site and sets the few
-  behaviours that are correctness rather than taste.
-*/
-
-/* Loaded first, so this single line decides precedence for everything that
-   follows. `theme` is last, which means your file always wins. */
 @layer reset, base, components, layout, theme;
 
-/* Top-level at-rule: cross-document view transitions between index and work
-   pages. Browsers without support simply navigate normally. */
 @view-transition {
   navigation: auto;
 }
@@ -27,8 +15,6 @@
     margin: 0;
   }
 
-  /* Images must never overflow their column or shift layout while loading.
-     `height: auto` preserves the intrinsic ratio from the width/height attrs. */
   img,
   svg,
   video {
@@ -39,7 +25,6 @@
     block-size: auto;
   }
 
-  /* Inherit rather than impose: no font-family is chosen here. */
   button,
   input,
   select,
@@ -50,31 +35,119 @@
 }
 
 @layer base {
+  :root {
+    --page: #fbfaf8;
+    --surface: #fbfaf8;
+    --ink: #1a1a1a;
+    --ink-muted: #5a5a5a;
+    --ink-on-image: #ffffff;
+    --rule: #1a1a1a;
+    --scrim: rgb(0 0 0 / 0.28);
+    --shadow-on-image: 0 1px 2px rgb(0 0 0 / 0.35);
+
+    --font-body: system-ui, sans-serif;
+    --font-display: system-ui, sans-serif;
+    --font-size-small: 0.9rem;
+    --font-size-meta: 0.8rem;
+
+    --header-height: 3rem;
+    --gutter: 1rem;
+    --measure: 72rem;
+    --measure-text: 38rem;
+    --images-gap: 0.75rem;
+    --target-size: 2.75rem;
+    --target-size-inline: 2.5rem;
+    --slide-duration: 260ms;
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      --gutter: 1.5rem;
+      --images-gap: 1rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    :root {
+      --header-height: 3.5rem;
+      --gutter: 2rem;
+    }
+  }
+
   html {
     -webkit-text-size-adjust: 100%;
   }
 
-  /* Keyboard users must be able to see where they are. Remove this only if you
-     replace it with something at least as visible. */
   :focus-visible {
     outline: 2px solid currentColor;
     outline-offset: 2px;
   }
 
-  /*
-    The skip link must be genuinely visible when focused. Previously it only
-    translated into view with no background of its own, so it landed as unstyled
-    text over whatever was beneath it — present to a screen reader, invisible to
-    a sighted keyboard user, which is the group it exists for.
-  */
+  :is(a, button, [role='button'], summary) {
+    min-block-size: 24px;
+  }
+
+  .shell {
+    inline-size: 100%;
+    max-inline-size: var(--measure);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+  }
+
+  .prose {
+    max-inline-size: var(--measure-text);
+    text-wrap: pretty;
+  }
+
+  .list-plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .link-plain {
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .button-plain {
+    appearance: none;
+    border: 0;
+    background: none;
+    padding: 0;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  .control {
+    display: grid;
+    place-items: center;
+    inline-size: var(--target-size);
+    block-size: var(--target-size);
+  }
+
+  .media-cover :is(img, picture) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .media-fit :is(img, picture) {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+  }
+
   .skip-link {
     position: fixed;
     inset-inline-start: 0.5rem;
     inset-block-start: 0.5rem;
     z-index: 100;
     padding: 0.75rem 1rem;
-    background: var(--surface, #fbfaf8);
-    color: var(--ink, #1a1a1a);
+    background: var(--surface);
+    color: var(--ink);
     border: 1px solid currentColor;
     text-decoration: none;
     translate: 0 -200%;
@@ -84,22 +157,6 @@
     translate: 0 0;
   }
 
-  /*
-    Minimum target size (WCAG 2.5.8). Applied to every control rather than
-    remembered per component.
-  */
-  :is(a, button, [role='button'], summary) {
-    min-block-size: 24px;
-  }
-
-  /*
-    Available to assistive technology, absent from the visual design. Used for
-    headings that a page needs structurally but does not want to show — the
-    cover page being the case in point.
-
-    clip-path rather than `display: none` or `visibility: hidden`, either of
-    which would remove it from the accessibility tree as well.
-  */
   .visually-hidden:not(:focus):not(:active) {
     position: absolute;
     inline-size: 1px;
@@ -112,10 +169,6 @@
     clip-path: inset(50%);
   }
 
-  /*
-    A global stop switch for motion. Every animation on the site is written to be
-    cancelled by this, so honouring the preference is not left to each component.
-  */
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

@@ -1,65 +1,42 @@
 ---
 layout: base.webc
 ---
-<article class="work">
+<article class="work shell">
   <header class="work__header">
     <h1 class="work__title" @text="this.title"></h1>
     <p class="work__meta"
        @text="`${this.year} · ${this.medium} · ${this.dimensions.height_cm} × ${this.dimensions.width_cm} cm`"></p>
   </header>
-
   <div class="work__images">
-    <!--
-      Lead image: full width of the column, but capped by viewport HEIGHT rather
-      than width. A 200 × 150 cm canvas is taller than most screens, so sizing on
-      width alone would push the caption and everything after it off-screen.
-    -->
-    <figure class="work__figure work__figure--lead"
+    <figure class="work__figure work__figure--lead media-fit"
             :style="`--aspect: ${this.dimensions.width_cm / this.dimensions.height_cm}`">
-      <button class="work__zoom" type="button" :popovertarget="`full-${this.page.fileSlug}`"
+      <button class="work__zoom button-plain" type="button" :popovertarget="`full-${this.page.fileSlug}`"
               :aria-label="`View ${this.title} full size`">
         <span webc:nokeep
           @html="this.picture(this.image, { alt: this.alt, sizes: '(min-width: 64rem) 60rem, 100vw', className: 'work__image', eager: true })"></span>
       </button>
     </figure>
-
-    <!-- Further views sit at thirds beneath the lead image. -->
-    <figure class="work__figure work__figure--secondary"
+    <figure class="work__figure work__figure--secondary media-fit"
             webc:for="view of (this.images || [])">
       <span webc:nokeep
         @html="this.picture(view.src, { alt: view.alt, sizes: '(min-width: 64rem) 24rem, (min-width: 40rem) 50vw, 100vw', className: 'work__image' })"></span>
       <figcaption class="work__view-caption" @text="view.alt"></figcaption>
     </figure>
   </div>
-
-  <div class="work__body" @raw="this.content"></div>
-
+  <div class="work__body prose" @raw="this.content"></div>
   <nav class="work__nav" aria-label="Work">
     <a :href="this.url('/works/')">All works</a>
-    <!-- seriesUrl is computed in works.11tydata.ts; absent when no series page exists. -->
     <a webc:if="this.seriesUrl" :href="this.url(this.seriesUrl)" @text="this.series"></a>
   </nav>
-
-  <!--
-    Popover: a top-layer dialog with no script behind it. It needs its own
-    accessible name — without one it announces as an unnamed group.
-  -->
   <div class="lightbox" :id="`full-${this.page.fileSlug}`" popover
        role="dialog" aria-modal="true" :aria-label="`${this.title}, full size`">
-    <button class="lightbox__close" type="button" :popovertarget="`full-${this.page.fileSlug}`"
+    <button class="lightbox__close button-plain" type="button" :popovertarget="`full-${this.page.fileSlug}`"
             popovertargetaction="hide">Close</button>
     <span webc:nokeep
       @html="this.picture(this.image, { alt: this.alt, sizes: '100vw', className: 'lightbox__image' })"></span>
   </div>
 </article>
-
 <style webc:scoped>
-  .work {
-    padding-inline: var(--gutter, 1rem);
-    max-inline-size: var(--measure, 72rem);
-    margin-inline: auto;
-  }
-
   .work__header {
     padding-block: 1.5rem 1rem;
   }
@@ -72,21 +49,16 @@ layout: base.webc
 
   .work__meta {
     margin: 0.35rem 0 0;
-    font-size: 0.9rem;
-    color: var(--ink-muted, #5a5a5a);
+    font-size: var(--font-size-small);
+    color: var(--ink-muted);
   }
 
-  /*
-    The container is .work__images and the queries below target its children.
-    Container and target must never be the same element — a container query only
-    styles descendants, so a rule on the container itself silently never matches.
-  */
   .work__images {
     container-type: inline-size;
     container-name: work-images;
     display: flex;
     flex-flow: row wrap;
-    gap: var(--images-gap, 1rem);
+    gap: var(--images-gap);
     align-items: flex-start;
   }
 
@@ -98,87 +70,48 @@ layout: base.webc
     flex-basis: 100%;
   }
 
-  /*
-    On a phone the lead image is simply full width: the page scrolls vertically,
-    so a tall painting costs nothing but a scroll.
-  */
-  .work__figure--lead .work__zoom {
+  .work__zoom {
+    display: block;
     inline-size: 100%;
+    cursor: zoom-in;
   }
 
-  /*
-    From md up, cap by viewport HEIGHT as well: on a landscape screen a tall
-    canvas sized on width alone would push the caption and everything below it
-    off the bottom. min() takes whichever binds first; --aspect is the work's
-    true width ÷ height.
-
-    A media query on purpose, not a container query: the question here is the
-    shape of the viewport, which no container knows about.
-  */
   @media (min-width: 48rem) {
-    .work__figure--lead .work__zoom {
+    .work__zoom {
       inline-size: min(70vh * var(--aspect, 1), 100%);
     }
   }
 
-  /*
-    Further views: one column, then two, then Rebord's thirds.
-
-    The thresholds are the project's breakpoints, but read against the CONTAINER's
-    width, not the viewport's. The column is capped at --measure and inset by the
-    gutter, so it crosses each threshold slightly later than the viewport does —
-    which is the correct behaviour, since what matters is the space the images
-    actually have.
-  */
   .work__figure--secondary {
     flex-basis: 100%;
   }
 
-  /* sm */
   @container work-images (min-width: 40rem) {
     .work__figure--secondary {
-      flex-basis: calc(50% - var(--images-gap, 1rem) / 2);
+      flex-basis: calc(50% - var(--images-gap) / 2);
     }
   }
 
-  /* lg */
   @container work-images (min-width: 64rem) {
     .work__figure--secondary {
-      flex-basis: calc(33.3333% - var(--images-gap, 1rem) * 2 / 3);
+      flex-basis: calc(33.3333% - var(--images-gap) * 2 / 3);
     }
-  }
-
-  .work__zoom {
-    display: block;
-    padding: 0;
-    border: 0;
-    background: none;
-    cursor: zoom-in;
-  }
-
-  .work__figure :is(img, picture) {
-    display: block;
-    inline-size: 100%;
-    block-size: auto;
   }
 
   .work__view-caption {
     margin-block-start: 0.4rem;
-    font-size: 0.8rem;
-    color: var(--ink-muted, #5a5a5a);
+    font-size: var(--font-size-meta);
+    color: var(--ink-muted);
   }
 
   .work__body {
-    max-inline-size: 38rem;
     padding-block: 2rem 0;
-    text-wrap: pretty;
   }
 
   .work__nav {
     display: flex;
     gap: 1.5rem;
     padding-block: 2rem 3rem;
-    font-size: 0.9rem;
+    font-size: var(--font-size-small);
   }
-
 </style>

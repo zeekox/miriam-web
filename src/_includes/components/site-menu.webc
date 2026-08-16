@@ -1,47 +1,25 @@
-<!--
-  Off-canvas menu, slid in from the left.
-
-  Built on the `popover` attribute, so the open/close behaviour, the top layer,
-  light-dismiss (click outside, Escape), and focus handling are all the browser's
-  job — there is no JavaScript here at all. The slide is a transition made
-  possible by @starting-style and transition-behavior: allow-discrete; without
-  those two, an element going display:none could not be animated.
-
-  Props: site, navigation, series, works, current (see base.webc).
-
-  `current` is the page's own URL, used to mark the active link with
-  aria-current="page" — which is what tells a screen reader user where they are
-  in the menu, and is also the hook the bold styling hangs off.
--->
 <nav id="site-menu" class="menu" popover aria-label="Primary">
   <div class="menu__head">
-    <a class="menu__title" :href="this.url('/')" @text="this.site.title"></a>
-    <button class="menu__close" type="button" popovertarget="site-menu"
+    <a class="menu__title link-plain" :href="this.url('/')" @text="this.site.title"></a>
+    <button class="menu__close button-plain control" type="button" popovertarget="site-menu"
             popovertargetaction="hide" aria-label="Close menu">&times;</button>
   </div>
-
-  <ul class="menu__list">
+  <ul class="menu__list list-plain">
     <li class="menu__section" webc:for="section of navigation">
-      <a class="menu__section-link" webc:if="section.href" :href="this.url(section.href)"
+      <a class="menu__section-link link-plain" webc:if="section.href" :href="this.url(section.href)"
          :aria-current="this.current === section.href ? 'page' : false"
          @text="section.label"></a>
       <span class="menu__section-label" webc:else @text="section.label"></span>
-
-      <ul class="menu__sub" webc:if="section.children && section.children.length">
+      <ul class="menu__sub list-plain" webc:if="section.children && section.children.length">
         <li webc:for="item of section.children">
-          <a class="menu__link" :href="this.url(item.href)"
+          <a class="menu__link link-plain" :href="this.url(item.href)"
              :aria-current="this.current === item.href ? 'page' : false"
              @text="item.label"></a>
         </li>
       </ul>
-
-      <!--
-        Series come from content files, and the count is counted from the works
-        themselves — so neither the list nor the numbers can drift from reality.
-      -->
-      <ul class="menu__sub" webc:if="section.includeSeries && series.length">
+      <ul class="menu__sub list-plain" webc:if="section.includeSeries && series.length">
         <li webc:for="entry of series">
-          <a class="menu__link" :href="this.url(entry.url)"
+          <a class="menu__link link-plain" :href="this.url(entry.url)"
              :aria-current="this.current === entry.url ? 'page' : false">
             <span @text="entry.data.title"></span>
             <span class="menu__count"
@@ -52,10 +30,8 @@
     </li>
   </ul>
 </nav>
-
 <style webc:scoped>
   .menu {
-    /* Popovers are centred in the top layer by default; reset that and pin left. */
     position: fixed;
     inset: 0 auto 0 0;
     margin: 0;
@@ -63,20 +39,17 @@
     max-block-size: 100dvh;
     overflow-y: auto;
     border: 0;
-    border-inline-end: 1px solid var(--rule, #1a1a1a);
-    padding: var(--menu-padding, 1.25rem);
-    background: var(--surface, #fbfaf8);
-    color: var(--ink, #1a1a1a);
-
-    /* Closed state. `overlay` must be in the transition list or the element is
-       yanked out of the top layer before the slide has finished. */
+    border-inline-end: 1px solid var(--rule);
+    padding: 1.25rem;
+    background: var(--surface);
+    color: var(--ink);
     translate: -100% 0;
     opacity: 0;
     transition:
-      translate 260ms ease,
-      opacity 260ms ease,
-      overlay 260ms allow-discrete,
-      display 260ms allow-discrete;
+      translate var(--slide-duration) ease,
+      opacity var(--slide-duration) ease,
+      overlay var(--slide-duration) allow-discrete,
+      display var(--slide-duration) allow-discrete;
   }
 
   .menu:popover-open {
@@ -84,7 +57,6 @@
     opacity: 1;
   }
 
-  /* The state to animate *from* when the element first renders. */
   @starting-style {
     .menu:popover-open {
       translate: -100% 0;
@@ -93,12 +65,12 @@
   }
 
   .menu::backdrop {
-    background: rgb(0 0 0 / 0.28);
+    background: var(--scrim);
   }
 
   .menu__head {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 1rem;
     margin-block-end: 1.5rem;
@@ -106,25 +78,11 @@
 
   .menu__title {
     font-size: 1rem;
-    text-decoration: none;
-    color: inherit;
   }
 
   .menu__close {
-    border: 0;
-    background: none;
-    padding: 0;
     font-size: 1.5rem;
     line-height: 1;
-    cursor: pointer;
-    color: inherit;
-  }
-
-  .menu__list,
-  .menu__sub {
-    list-style: none;
-    margin: 0;
-    padding: 0;
   }
 
   .menu__section {
@@ -132,11 +90,16 @@
   }
 
   .menu__section-link,
+  .menu__section-label,
+  .menu__link {
+    display: flex;
+    align-items: center;
+    min-block-size: var(--target-size-inline);
+  }
+
+  .menu__section-link,
   .menu__section-label {
-    display: block;
     font-size: 0.95rem;
-    text-decoration: none;
-    color: inherit;
   }
 
   .menu__sub {
@@ -144,55 +107,29 @@
     padding-inline-start: 0.9rem;
   }
 
-  /*
-    Colour, not opacity: nesting a 0.5-opacity count inside a 0.75-opacity link
-    multiplies to 0.375 and fails contrast. Padding gives a ~40px tap target.
-  */
   .menu__link {
-    display: flex;
-    align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
     padding-block: 0.5rem;
-    min-block-size: 2.5rem;
-    font-size: 0.9rem;
-    text-decoration: none;
-    color: var(--ink-muted, #5a5a5a);
+    font-size: var(--font-size-small);
+    color: var(--ink-muted);
   }
 
   .menu__link:hover,
   .menu__link:focus-visible {
-    color: var(--ink, #1a1a1a);
+    color: var(--ink);
   }
 
-  .menu__link[aria-current='page'] {
-    color: var(--ink, #1a1a1a);
+  :is(.menu__link, .menu__section-link)[aria-current='page'] {
+    color: var(--ink);
     font-weight: 600;
   }
 
   .menu__count {
     font-variant-numeric: tabular-nums;
-    color: var(--ink-muted, #5a5a5a);
+    color: var(--ink-muted);
   }
 
-  .menu__section-link {
-    min-block-size: 2.5rem;
-    display: flex;
-    align-items: center;
-  }
-
-  .menu__section-link[aria-current='page'] {
-    font-weight: 600;
-  }
-
-  .menu__close {
-    display: grid;
-    place-items: center;
-    min-inline-size: 2.75rem;
-    min-block-size: 2.75rem;
-  }
-
-  /* No slide for anyone who asked for less motion; it simply appears. */
   @media (prefers-reduced-motion: reduce) {
     .menu {
       transition: none;

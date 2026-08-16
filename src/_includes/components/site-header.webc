@@ -1,30 +1,17 @@
-<!--
-  Fixed header, three columns: menu toggle at the left, title centred, a slot at
-  the right. The centre column is min-content and the left is 1fr, so the title
-  stays optically centred rather than drifting with the button's width.
-
-  There is no search: the site is static with no index behind it, and a search
-  affordance that cannot search is worse than none.
-
-  Props: site (see base.webc).
--->
 <header class="header">
   <div class="header__col header__col--left">
-    <button class="header__button" type="button" popovertarget="site-menu"
+    <button class="header__button button-plain control" type="button" popovertarget="site-menu"
             aria-label="Open menu">
       <svg viewBox="0 0 20 14" width="20" height="14" aria-hidden="true" focusable="false">
         <path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.4" fill="none"/>
       </svg>
     </button>
   </div>
-
   <div class="header__col header__col--center">
-    <a class="header__title" :href="this.url('/')" @text="this.site.title"></a>
+    <a class="header__title link-plain" :href="this.url('/')" @text="this.site.title"></a>
   </div>
-
   <div class="header__col header__col--right"></div>
 </header>
-
 <style webc:scoped>
   .header {
     position: fixed;
@@ -32,55 +19,50 @@
     inset-inline: 0;
     z-index: 20;
     display: grid;
-    /* minmax(0, …) so the centre column may shrink below its content on a narrow
-       screen instead of pushing the header wider than the viewport. */
     grid-template-columns: [left] 1fr [center] minmax(0, max-content) [right] 1fr;
     align-items: center;
     gap: 0.5em;
-    padding-inline: var(--gutter, 1rem);
-    block-size: var(--header-height, 3rem);
+    padding-inline: var(--gutter);
+    block-size: var(--header-height);
     font-size: 0.875rem;
-    background: var(--header-bg, rgb(251 250 248 / 0.92));
-    color: var(--ink, #1a1a1a);
+    background: color-mix(in srgb, var(--page) 92%, transparent);
+    color: var(--ink);
     backdrop-filter: blur(6px);
   }
 
-  .header__col { display: flex; align-items: center; }
-  .header__col--left { grid-column: left; }
-  .header__col--center { grid-column: center; justify-content: center; }
-  .header__col--right { grid-column: right; justify-content: flex-end; }
+  @media (min-width: 48rem) {
+    .header {
+      font-size: 0.95rem;
+    }
+  }
 
-  /* Truncate rather than wrap or overflow: the header is a fixed-height bar. */
+  .header__col {
+    display: flex;
+    align-items: center;
+  }
+
+  .header__col--left {
+    grid-column: left;
+  }
+
+  .header__col--center {
+    grid-column: center;
+    justify-content: center;
+  }
+
+  .header__col--right {
+    grid-column: right;
+    justify-content: flex-end;
+  }
+
   .header__title {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-inline-size: 100%;
-    text-decoration: none;
-    color: inherit;
   }
 
-  @media (min-width: 48rem) {
-    .header { font-size: 0.95rem; }
-  }
-
-  /* 44px square: the primary control on every page, so it gets a real target. */
   .header__button {
-    display: grid;
-    place-items: center;
-    inline-size: 2.75rem;
-    block-size: 2.75rem;
-    margin-inline-start: -0.5rem;
-    border: 0;
-    background: none;
-    padding: 0;
-    cursor: pointer;
-    color: inherit;
+    margin-inline-start: calc(var(--gutter) * -0.5);
   }
-
-  /*
-    The cover-page variant (transparent header over the image) lives in
-    layout.css, not here: webc:scoped rewrites these selectors to sit inside the
-    component, so they cannot react to a class on <body>.
-  */
 </style>

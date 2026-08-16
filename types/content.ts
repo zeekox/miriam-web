@@ -1,18 +1,8 @@
-/**
- * The content contract.
- *
- * Front matter is untyped YAML at rest, so these types are only a promise until
- * something checks them. `assertWork` is that check: it runs at build time and
- * throws, which fails the Eleventy build rather than shipping a broken figure.
- */
-
-/** Physical size of the work, in centimetres. Structured, not a display string. */
 export interface Dimensions {
   readonly heightCm: number
   readonly widthCm: number
 }
 
-/** An additional view of a work: a detail, an install shot, a verso. */
 export interface WorkImage {
   readonly src: string
   readonly alt: string
@@ -21,28 +11,15 @@ export interface WorkImage {
 export interface Work {
   readonly title: string
   readonly year: number
-  /** e.g. "oil on linen" */
   readonly medium: string
   readonly dimensions: Dimensions
-  /** Path to the lead photograph, relative to the repo root. */
   readonly image: string
-  /**
-   * Required, deliberately not optional. A gallery of paintings without alt text
-   * is a gallery that does not exist for some visitors.
-   */
   readonly alt: string
-  /**
-   * Further views, shown after the lead image. Each needs its own alt — a detail
-   * shot describes something different from the whole painting.
-   */
   readonly images?: readonly WorkImage[]
-  /** Optional grouping key. */
   readonly series?: string
-  /** Optional manual sequencing; falls back to `year`. */
   readonly order?: number
 }
 
-/** A `Work` plus the things Eleventy knows about the page it came from. */
 export interface WorkEntry extends Work {
   readonly url: string
   readonly slug: string
@@ -130,8 +107,7 @@ function parseImages(value: unknown, source: string): readonly WorkImage[] | und
     if (!isRecord(entry)) {
       throw new ContentError(source, `"images[${i}]" must be a mapping of src and alt`)
     }
-    // Same rule as the lead image: a detail shot with no alt is invisible to
-    // someone using a screen reader, so it fails the build too.
+
     return {
       src: requireString(entry, 'src', `${source} (images[${i}])`),
       alt: requireString(entry, 'alt', `${source} (images[${i}])`),
@@ -139,12 +115,6 @@ function parseImages(value: unknown, source: string): readonly WorkImage[] | und
   })
 }
 
-/**
- * Narrow raw front matter to a `Work`, or throw.
- *
- * `source` is the file path, so a failure names the file the author has to fix
- * instead of just reporting that something, somewhere, is wrong.
- */
 export function parseWork(raw: unknown, source: string): Work {
   if (!isRecord(raw)) {
     throw new ContentError(source, 'front matter is missing or not a mapping')
@@ -162,7 +132,6 @@ export function parseWork(raw: unknown, source: string): Work {
   }
 }
 
-/** Aspect ratio (width / height) from the physical dimensions. */
 export function aspectRatio(dimensions: Dimensions): number {
   return dimensions.widthCm / dimensions.heightCm
 }

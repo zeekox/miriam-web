@@ -1,10 +1,3 @@
-/**
- * The subset of Eleventy's config API this project calls.
- *
- * Intentionally narrow — modelling every overload of addCollection/addShortcode
- * would be noise. Interfaces only, so `import type` erases this file at runtime.
- */
-
 export interface EleventyCollectionItem {
   readonly url: string
   readonly inputPath: string
@@ -17,7 +10,6 @@ export interface EleventyCollectionApi {
 }
 
 export interface EleventyConfig {
-  /** Glob patterns Eleventy will not treat as templates. */
   readonly ignores: Set<string>
   addPlugin(plugin: unknown, options?: Record<string, unknown>): void
   addPassthroughCopy(

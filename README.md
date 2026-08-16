@@ -69,22 +69,68 @@ the function's own source into the page:
 - The image shortcode is `picture`, not `image`, because every work has `image`.
 - There are no `year` or `dimensions` filters, because every work has both.
 
-## What is deliberately unfinished
+## Conventions
 
-This is a scaffold. **The visual design is not mine to make** — it belongs to the
-artist. So:
+**No comments in code.** Not in TypeScript, CSS, WebC, or SVG — names and
+structure carry the meaning, and rationale lives here and in commit messages
+instead. SVG `<title>`/`<desc>` stay: they are the accessible name and
+description, not commentary.
 
-- `assets/css/theme.css` is **empty**, with only the custom-property names the
-  templates read, unset. It loads last and sits in the last cascade layer, so
-  anything written there wins without `!important`.
-- `assets/css/layout.css` is marked `PROVISIONAL`. It exists only so pages render
-  as something rather than a column of full-width images. Deleting it should break
-  nothing but the arrangement.
-- `assets/css/base.css` is structural only — box-sizing, focus visibility, the
-  cascade layer order, and the global reduced-motion switch.
+**One way of doing a thing.** If two places solve the same problem differently,
+that is a defect. It is what caused the one-column grid bug: the index used
+container queries while work pages used media queries, so only one of them was
+audited when the container rule turned out to be wrong.
 
-No colour palette, no type scale, no reset framework, no utility classes. Every
-element carries a meaningful class name to select against.
+### Breakpoints
+
+| | | |
+|---|---|---|
+| sm | `40rem` | 640px |
+| md | `48rem` | 768px |
+| lg | `64rem` | 1024px |
+| xl | `80rem` | 1280px |
+
+In rem, not px: a media query's rem is the browser's *initial* font size, so a
+reader who has enlarged their default text reaches the simpler layout sooner.
+Everything is mobile-first; every query is `min-width`, so a rule is only ever
+added, never undone.
+
+Column counts use **container** queries — the container is always a wrapper, never
+the element being styled. A container query only matches descendants, so a rule
+that targets its own container silently never applies.
+
+### Shared classes
+
+Defined once in `base.css`, applied in markup rather than re-declared per
+component:
+
+| Class | Purpose |
+|---|---|
+| `shell` | Centred page column: `--measure` wide, `--gutter` inset |
+| `prose` | Readable measure plus `text-wrap: pretty` |
+| `list-plain` | Unstyled list |
+| `link-plain` | Undecorated, inherits colour |
+| `button-plain` | Button with no chrome |
+| `control` | Square hit target of `--target-size` |
+| `media-cover` | Child image fills and crops |
+| `media-fit` | Child image fills width, keeps ratio |
+
+### Tokens
+
+All defaults live in `base.css`; `theme.css` overrides them and loads last, so it
+always wins without `!important`. Because defaults exist, call sites use
+`var(--ink-muted)` with no fallback.
+
+Colour: `--page`, `--surface`, `--ink`, `--ink-muted`, `--ink-on-image`, `--rule`,
+`--scrim`, `--shadow-on-image`. Type: `--font-body`, `--font-display`,
+`--font-size-small`, `--font-size-meta`. Space: `--header-height`, `--gutter`,
+`--measure`, `--measure-text`, `--images-gap`, `--target-size`.
+
+Muted text is a **colour token, never `opacity`** — opacity compounds through
+nesting and quietly fails contrast.
+
+The garden scene has its own `--garden-*` set, each with a fallback baked into the
+component, so it recolours from `theme.css` without touching the SVG.
 
 ### Cascade layers
 
@@ -142,13 +188,17 @@ the one exception, because they have no vector form.
 
 ## Typography
 
-Nothing sets a `font-family`. Visit **`/specimen/`** to compare three pairings at
-working sizes, then set `--font-display` and `--font-body` in `theme.css` and
-delete the two you did not pick (files, `@font-face` blocks, and the rows in
-`assets/fonts/LICENSES.md`).
+Body text is **Istok Web**, headings are **Work Sans**, set as `--font-body` and
+`--font-display` in `theme.css`. Nothing else declares a family, so changing those
+two lines changes the site.
 
-All six faces are self-hosted woff2 under the Open Font License — no font CDN, no
-third-party request. See `src/assets/fonts/LICENSES.md`.
+**`/specimen/`** still compares three serif pairings at working sizes, overriding
+the tokens per block. Once the choice is settled it can be deleted along with the
+faces it is the only user of.
+
+All faces are self-hosted woff2 under the Open Font License — no font CDN, no
+third-party request. Roboto is bundled but currently unused. See
+`src/assets/fonts/LICENSES.md`.
 
 ## Modern web platform
 

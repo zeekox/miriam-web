@@ -1,11 +1,3 @@
-// Ambient declarations for the Eleventy packages, which ship JSDoc-typed
-// JavaScript rather than .d.ts files.
-//
-// This file must have NO top-level import or export. A .d.ts with either becomes
-// a module, and `declare module` inside a module means *augmentation* of an
-// existing module rather than declaration of a new one — so the declarations
-// below would silently stop applying. Shared interfaces live in ./eleventy.ts.
-
 declare module '@11ty/eleventy-plugin-webc' {
   const plugin: unknown
   export default plugin

@@ -1,21 +1,12 @@
 ---
 layout: base.webc
 ---
-<article class="page">
+<article class="page shell">
   <h1 class="page__title" @text="this.title"></h1>
-  <div class="page__body" @raw="this.content"></div>
-
-  <!-- Opt in per page with `show_garden: true` in front matter. -->
+  <div class="page__body prose" @raw="this.content"></div>
   <garden-scene webc:if="this.show_garden" class="page__garden"></garden-scene>
 </article>
-
 <style webc:scoped>
-  .page {
-    padding-inline: var(--gutter, 1rem);
-    max-inline-size: var(--measure, 72rem);
-    margin-inline: auto;
-  }
-
   .page__title {
     margin: 0;
     padding-block: 1.5rem 1rem;
@@ -24,13 +15,9 @@ layout: base.webc
   }
 
   .page__body {
-    max-inline-size: 38rem;
     line-height: 1.65;
-    text-wrap: pretty;
   }
 
-  /* Rhythm for Markdown content. The article root carries the scoping class, so
-     these reach headings and paragraphs that came from the .md file. */
   .page__body :is(h2, h3) {
     margin-block: 2.5rem 0.5rem;
     font-size: 1.2rem;

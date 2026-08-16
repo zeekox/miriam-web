@@ -1,119 +1,41 @@
-/*
-  layout.css
-
-  ─────────────────────────────────────────────────────────────────────────────
-  PROVISIONAL — REPLACE.
-
-  Page-level chrome and the few rules that must sit outside a component, because
-  webc:scoped rewrites component selectors to live inside their own component and
-  they therefore cannot react to a class on <body>.
-
-  Component-local layout lives with each component. This file holds only what is
-  genuinely cross-cutting.
-  ─────────────────────────────────────────────────────────────────────────────
-*/
-
-/*
-  ── Breakpoints ───────────────────────────────────────────────────────────────
-
-  One scale, used everywhere. Custom properties cannot be used in a media query
-  condition, so these values are written literally — but they are written the
-  same everywhere, and this is the list to change.
-
-      sm    40rem    640px
-      md    48rem    768px
-      lg    64rem   1024px
-      xl    80rem   1280px
-
-  In rem rather than px on purpose: a media query's rem is the browser's initial
-  font size, unaffected by any root font-size, so someone who has set a larger
-  default text size gets the simpler layout at the point it actually helps them.
-
-  Everything is mobile-first — the base rules are the single-column layout, and
-  each min-width query adds columns. Nothing uses max-width, so a rule is only
-  ever added, never undone.
-*/
-
 @layer layout {
-  :root {
-    --header-height: 3rem;
-    --gutter: 1rem;
-    --measure: 72rem;
-    --images-gap: 0.75rem;
-  }
-
-  /* Room to breathe once there is room to spare. */
-  @media (min-width: 48rem) {
-    :root {
-      --gutter: 1.5rem;
-      --images-gap: 1rem;
-    }
-  }
-
-  @media (min-width: 64rem) {
-    :root {
-      --header-height: 3.5rem;
-      --gutter: 2rem;
-    }
-  }
-
   body {
-    /* Body text inherits from here; the values live in theme.css. */
-    font-family: var(--font-body, system-ui, sans-serif);
-    background: var(--page, #fbfaf8);
-    color: var(--ink, #1a1a1a);
+    font-family: var(--font-body);
+    background: var(--page);
+    color: var(--ink);
   }
 
-  /* Headings take the display face. Everything else — running text, captions,
-     metadata, menu links, buttons — inherits the body face from <body>. */
-  :is(h1, h2, h3, h4, h5, h6) {
-    font-family: var(--font-display, system-ui, sans-serif);
-  }
-
-  /* The site title is a title even though it is marked up as a link rather than
-     a heading (it repeats on every page, so it is not an <h1>). */
+  :is(h1, h2, h3, h4, h5, h6),
   .header__title,
   .menu__title {
-    font-family: var(--font-display, system-ui, sans-serif);
+    font-family: var(--font-display);
   }
 
-  /* The cover page runs the image under a transparent header, so the header
-     inverts. This has to live outside site-header.webc: a scoped component
-     cannot select an ancestor <body> class. */
-  body.layout-cover .header {
-    background: transparent;
-    backdrop-filter: none;
-    color: var(--ink-on-image, #fff);
-    text-shadow: 0 1px 2px rgb(0 0 0 / 0.35);
+  .main {
+    min-block-size: 100dvh;
+    padding-block-start: var(--header-height);
   }
 
-  /* The cover fills the viewport exactly; page scrolling would reveal a strip
-     of background beneath it. */
   body.layout-cover {
     overflow-y: hidden;
   }
 
-  /*
-    The header is fixed, so every page needs to start below it. Done once here
-    rather than per component — /specimen/ was missing its own copy and rendered
-    under the header.
-  */
-  .main {
-    min-block-size: 100dvh;
-    padding-block-start: var(--header-height, 3rem);
-  }
-
-  /* The cover is the exception: it runs full-bleed beneath a transparent header. */
   body.layout-cover .main {
     min-block-size: 0;
     padding-block-start: 0;
   }
 
-  /* Full-screen lightbox, opened by the popover attribute alone. */
+  body.layout-cover .header {
+    background: transparent;
+    backdrop-filter: none;
+    color: var(--ink-on-image);
+    text-shadow: var(--shadow-on-image);
+  }
+
   .lightbox {
     border: 0;
     padding: 0;
-    background: var(--page, #fbfaf8);
+    background: var(--page);
   }
 
   .lightbox:popover-open {
@@ -123,7 +45,7 @@
     max-inline-size: 100vw;
     block-size: 100dvh;
     max-block-size: 100dvh;
-    padding: 1rem;
+    padding: var(--gutter);
   }
 
   .lightbox :is(img, picture) {
@@ -138,20 +60,11 @@
     inset-block-start: 1rem;
     inset-inline-end: 1rem;
     z-index: 1;
-    border: 0;
-    background: none;
-    cursor: pointer;
-    font-size: 0.9rem;
-    color: inherit;
+    font-size: var(--font-size-small);
   }
 }
 
 @layer components {
-  /*
-    Scroll-driven reveal for the work grid. Runs only where supported and only
-    when the visitor has not asked for reduced motion — the global switch in
-    base.css cancels it too.
-  */
   @supports (animation-timeline: view()) {
     @media (prefers-reduced-motion: no-preference) {
       .work-grid__item {
@@ -161,8 +74,12 @@
       }
 
       @keyframes work-reveal {
-        from { opacity: 0; }
-        to { opacity: 1; }
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
       }
     }
   }

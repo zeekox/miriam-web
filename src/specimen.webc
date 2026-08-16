@@ -8,18 +8,17 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
     <h1>Type specimen</h1>
     <p>
       Three pairings, each setting a work title beside a paragraph of running text
-      at the sizes they would actually be used. Nothing on the rest of the site
-      sets a <code>font-family</code>: once you have chosen, set
-      <code>--font-display</code> and <code>--font-body</code> in
-      <code>theme.css</code> and delete the two you did not pick.
+      at the sizes they would actually be used. The site currently runs on Istok
+      Web with Work Sans headings; to switch, set <code>--font-display</code> and
+      <code>--font-body</code> in <code>theme.css</code> and delete the pairings
+      you did not pick.
     </p>
     <p class="specimen__note">
-      All six faces are self-hosted and under the Open Font License. Redaction is
-      the odd one out: it is not variable, and ships instead in seven grades of
+      All faces are self-hosted and under the Open Font License. Redaction is the
+      odd one out: it is not variable, and ships instead in seven grades of
       progressive degradation.
     </p>
   </header>
-
   <section class="pairing" aria-labelledby="pairing-a">
     <h2 class="pairing__label" id="pairing-a">A — Redaction &amp; Fraunces</h2>
     <div class="pairing__demo" style="--display: 'Redaction'; --body: 'Fraunces', 'Fraunces fallback', serif;">
@@ -40,7 +39,6 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
       </div>
     </div>
   </section>
-
   <section class="pairing" aria-labelledby="pairing-b">
     <h2 class="pairing__label" id="pairing-b">B — Bricolage Grotesque &amp; Literata</h2>
     <div class="pairing__demo" style="--display: 'Bricolage Grotesque'; --body: 'Literata', 'Literata fallback', serif;">
@@ -61,7 +59,6 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
       </div>
     </div>
   </section>
-
   <section class="pairing" aria-labelledby="pairing-c">
     <h2 class="pairing__label" id="pairing-c">C — Bodoni Moda &amp; Source Serif 4</h2>
     <div class="pairing__demo" style="--display: 'Bodoni Moda'; --body: 'Source Serif 4', 'Source Serif 4 fallback', serif;">
@@ -82,7 +79,6 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
       </div>
     </div>
   </section>
-
   <section class="pairing" aria-labelledby="pairing-grades">
     <h2 class="pairing__label" id="pairing-grades">Redaction, on its own terms</h2>
     <p class="specimen__note">
@@ -92,13 +88,7 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
     <p class="pairing__title" style="--display: 'Redaction';">Debí tirar más fotos</p>
   </section>
 </div>
-
 <style webc:scoped>
-  /*
-    PROVISIONAL — this page is a measuring instrument, not a designed page. It
-    sets sizes only so the comparison is fair, and deliberately makes no other
-    choices. Delete the whole page once you have picked a pairing.
-  */
   .specimen {
     display: grid;
     gap: 3rem;
@@ -130,8 +120,6 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
     font-weight: 400;
   }
 
-  /* Title beside paragraph, so the two faces are judged in relation rather than
-     one after the other. Stacks when there is not room for both. */
   .pairing__demo {
     display: grid;
     gap: 2rem;
@@ -139,7 +127,6 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
     align-items: start;
   }
 
-  /* md — title beside paragraph once there is room for both. */
   @media (min-width: 48rem) {
     .pairing__demo {
       grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);

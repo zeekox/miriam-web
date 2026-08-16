@@ -1,3 +1,14 @@
-<footer class="site-footer">
+<footer class="site-footer shell">
   <p class="site-footer__credit" @text="`© ${new Date().getFullYear()} ${this.site.author}`"></p>
 </footer>
+<style webc:scoped>
+  .site-footer {
+    padding-block: 2rem 3rem;
+  }
+
+  .site-footer__credit {
+    margin: 0;
+    font-size: var(--font-size-meta);
+    color: var(--ink-muted);
+  }
+</style>
