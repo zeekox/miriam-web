@@ -78,6 +78,40 @@
   font-display: swap;
 }
 
+/* ── Sample faces, used by /texts/ ───────────────────────────────────────────
+   Downloaded from Google Fonts and self-hosted, like everything else here. They
+   are not linked from fonts.googleapis.com on purpose: a stylesheet link there
+   would put a third-party origin into the page, which this project checks for
+   and does not allow. Same files, served from our own domain. */
+
+/* Variable: weight 100–900. */
+@font-face {
+  font-family: 'Work Sans';
+  src: url('/assets/fonts/work-sans-variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Variable: weight 100–900. */
+@font-face {
+  font-family: 'Roboto';
+  src: url('/assets/fonts/roboto-variable.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Istok Web is not a variable font — it ships as discrete weights. Only the
+   regular is bundled; add the 700 file if bold is ever needed. */
+@font-face {
+  font-family: 'Istok Web';
+  src: url('/assets/fonts/istok-web-400.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 /*
   Metric-adjusted fallbacks.
 

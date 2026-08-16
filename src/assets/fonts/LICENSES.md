@@ -15,6 +15,13 @@ ever needs Greek, Cyrillic, or extended Latin, re-download the fuller subset.
 | `literata-variable.woff2` | Literata | Google Fonts | OFL |
 | `bodoni-moda-variable.woff2` | Bodoni Moda | Google Fonts | OFL |
 | `source-serif-4-variable.woff2` | Source Serif 4 | Google Fonts | OFL |
+| `work-sans-variable.woff2` | Work Sans | Google Fonts | OFL |
+| `roboto-variable.woff2` | Roboto | Google Fonts | OFL |
+| `istok-web-400.woff2` | Istok Web | Google Fonts | OFL |
+
+The last three are used by `/texts/`: Work Sans for the headings, Roboto and
+Istok Web for the two specimen paragraphs. Istok Web is not variable, so only its
+regular weight is bundled.
 
 ## Redaction, specifically
 
