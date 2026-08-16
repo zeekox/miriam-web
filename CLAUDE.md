@@ -3,7 +3,8 @@
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 A portfolio site for a painter. Eleventy 3 + WebC, static, no client-side
-framework. See `README.md` for the design rationale and `DEPLOY.md` for shipping.
+framework. `README.md` is deliberately minimal (what it is, adding a work);
+`DEPLOY.md` covers shipping. Everything else belongs here.
 
 ## Commands
 
@@ -59,7 +60,27 @@ never sees the filter. A hardcoded absolute path in a template works locally and
 that wrapper components would override `theme.css`.
 
 **Series are content files** in `src/content/series/`, not pagination — see the
-permalink constraint below.
+permalink constraint below. The menu is derived: `src/_data/navigation.ts` holds
+only what cannot be computed, while series and their counts come from content, so
+it cannot drift.
+
+**No JavaScript.** The off-canvas menu and the full-size lightbox are `popover`,
+so the browser owns the top layer, light-dismiss, Escape and focus. The cover
+slideshow is a scroll-snap track whose arrows are anchors pointing at the
+neighbouring slide's `id`, wrapping at both ends. The only `<script>` in the
+output is a declarative `speculationrules` block; the site is fully navigable with
+JS disabled. Progressive enhancement throughout — `@view-transition`,
+scroll-driven animation and container queries all degrade to working HTML.
+
+**Images** go through `@11ty/eleventy-img` via the `picture` shortcode:
+photographs emit AVIF + WebP with a JPEG fallback, SVG sources emit the vector
+with raster behind it. Every `<img>` carries `srcset`, `sizes` and intrinsic
+dimensions. ICC profiles are preserved and JPEG uses 4:4:4 chroma — colour
+fidelity matters more than bytes for a photograph of a painting. Keep `sizes` in
+step with the layout breakpoints, or the browser picks resolutions for a layout
+that no longer exists.
+
+CSS masonry and the carousel pseudo-elements are deliberately unused.
 
 ## WebC constraints
 
@@ -95,7 +116,7 @@ These are not preferences; each one caused a real bug.
 ## Conventions
 
 - **No comments in code** — not in TS, CSS, WebC or SVG. Names and structure carry
-  the meaning; rationale goes in `README.md` and commit messages. SVG `<title>`
+  the meaning; rationale goes in this file and in commit messages. SVG `<title>`
   and `<desc>` stay, being the accessible name and description.
 - **Be consistent and do not duplicate.** Shared classes live in `base.css`
   (`shell`, `prose`, `list-plain`, `link-plain`, `button-plain`, `control`,

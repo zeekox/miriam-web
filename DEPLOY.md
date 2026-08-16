@@ -59,19 +59,13 @@ root and the default of `/` is correct.
 ## Path prefix
 
 An incorrect `PATH_PREFIX` produces a build that succeeds and a site that fails:
-pages render, but every stylesheet, font, and image returns 404, because the
-URLs remain rooted at `/`.
+pages render, but every stylesheet, font, and image returns 404, because the URLs
+remain rooted at `/`.
 
-Two independent mechanisms apply the prefix, and both must agree:
-
-- **Internal links** are passed through Eleventy's `url` filter in the
-  templates.
-- **Image URLs** are prefixed by `src/_lib/path-prefix.ts`. This is separate
-  because `@11ty/eleventy-img` writes URLs directly into the markup and does not
-  pass through the `url` filter.
-
-Because of the second mechanism, adding a hard-coded absolute path to a template
-will work locally and 404 once deployed to a project page.
+Verify before deploying by inspecting the output of the project-page build under
+[Local verification](#local-verification) — the fault is invisible in a default
+build. `CLAUDE.md` covers the two mechanisms that apply the prefix and why a
+hard-coded absolute path passes locally and fails once deployed.
 
 ## Pipeline
 
