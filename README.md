@@ -23,6 +23,52 @@ Because stripping never rewrites code, `enum`, `namespace`, and parameter
 properties are unavailable. `erasableSyntaxOnly` in `tsconfig.json` makes the
 compiler reject them rather than letting them fail at runtime.
 
+## Structure
+
+Designed against two references: Jérémy Rebord's Kleio site (front-page
+arrangement, work-page proportions) and Daniela Keiser's site (menu hierarchy,
+information-first density — with far less running text).
+
+| Route | What it is |
+|---|---|
+| `/` | Full-bleed cover: one work at a time at `100dvh`, `object-fit: cover` |
+| `/works/` | Every work as a gapless grid of square thumbnails |
+| `/series/<name>/` | One series, same grid, with an optional intro |
+| `/works/<name>/` | A single work: lead image, then further views at thirds |
+| `/texts/`, `/biography/`, `/information/` | Standalone pages |
+| `/specimen/` | Typeface comparison; delete once a pairing is chosen |
+
+**Off-canvas menu, no JavaScript.** The panel is a `popover`, so the browser
+handles the top layer, light-dismiss, Escape, and focus. The slide-in is a real
+transition via `@starting-style` and `transition-behavior: allow-discrete` —
+`overlay` is in the transition list, without which the element leaves the top
+layer before the slide finishes.
+
+**Cover slideshow, no JavaScript.** A scroll-snap track whose arrows are plain
+anchors pointing at the neighbouring slide's `id`; the last slide's "next" wraps
+to the first, so no arrow is ever a dead control. With CSS off it degrades to a
+scrollable row of images with working links.
+
+**Menu contents are derived, not maintained.** `src/_data/navigation.ts` holds
+only the parts that cannot be computed. Series come from files in
+`src/content/series/`, and each one's count is counted from the works — so the
+menu cannot drift from the content.
+
+**Series are content files, not pagination.** That gives each series a page the
+artist can write on, and sidesteps an Eleventy constraint: with dynamic
+permalinks disabled, a *paginated* template's permalink function is never
+evaluated (`Template.js` uses the raw value, and only `renderPermalink` — reached
+only when dynamic permalinks are on — resolves functions).
+
+### Two name collisions to know about
+
+WebC resolves shortcodes and filters *before* page data, so anything registered
+under the name of a front matter field shadows that field — silently, rendering
+the function's own source into the page:
+
+- The image shortcode is `picture`, not `image`, because every work has `image`.
+- There are no `year` or `dimensions` filters, because every work has both.
+
 ## What is deliberately unfinished
 
 This is a scaffold. **The visual design is not mine to make** — it belongs to the
@@ -143,6 +189,21 @@ on a project page — the prefix is the failure mode to watch for.
 - **A CMS.** Deferred deliberately: on GitHub Pages, Decap would need an external
   OAuth proxy, since Pages serves static files and has no functions. Front matter
   is already Decap-shaped, so adding `admin/config.yml` later is additive.
-- **About / CV / contact pages.** `src/content/pages/` and `page.webc` are ready.
-- **Real artwork.** Placeholders are SVG; swapping in photographs needs no code
-  change.
+- **Real content.** Texts, Biography and Information are stubs; the artwork is
+  placeholder SVG. Swapping in photographs needs no code change.
+- **Colour.** `layout.css` uses neutral fallbacks (`--page`, `--ink`, `--surface`,
+  `--rule`) so pages are legible. Every one is a custom property — set them in
+  `theme.css` to take it over.
+
+## The garden
+
+`garden-scene.webc` is an original drawing — two mismatched monobloc chairs,
+banana plants, muddy grass — sharing the subject and mood of the *Debí Tirar Más
+Fotos* cover, which is a copyrighted photograph and was not traced.
+
+Since the front page became a cover, the garden appears in two places: as the
+front page's **empty state** (no works published, so there is nothing to put on a
+cover), and on any page with `show_garden: true` in its front matter — currently
+`/information/`.
+
+It recolours entirely from `theme.css`; `--garden-*` properties are listed there.

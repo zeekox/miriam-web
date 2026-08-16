@@ -4,4 +4,33 @@ layout: base.webc
 <article class="page">
   <h1 class="page__title" @text="this.title"></h1>
   <div class="page__body" @raw="this.content"></div>
+
+  <!-- Opt in per page with `show_garden: true` in front matter. -->
+  <garden-scene webc:if="this.show_garden" class="page__garden"></garden-scene>
 </article>
+
+<style webc:scoped>
+  .page {
+    padding-block-start: var(--header-height, 3rem);
+    padding-inline: var(--gutter, 1rem);
+    max-inline-size: var(--measure, 72rem);
+    margin-inline: auto;
+  }
+
+  .page__title {
+    margin: 0;
+    padding-block: 1.5rem 1rem;
+    font-size: 1rem;
+    font-weight: 400;
+  }
+
+  .page__body {
+    max-inline-size: 38rem;
+    text-wrap: pretty;
+  }
+
+  .page__garden {
+    display: block;
+    margin-block: 3rem;
+  }
+</style>

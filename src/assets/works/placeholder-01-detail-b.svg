@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 160" width="120" height="160" role="img" aria-label="Placeholder standing in for an installation photograph">
+  <!-- Deliberately inert. This is scaffolding, not artwork. -->
+  <rect width="120" height="160" fill="#c6c1b7"/>
+  <rect x="0.5" y="0.5" width="119" height="159" fill="none" stroke="#8c877d" stroke-width="1"/>
+  <path d="M120 0 L0 160" stroke="#8c877d" stroke-width="0.5" opacity="0.4"/>
+  <text x="60" y="78" font-family="monospace" font-size="7" fill="#57534a" text-anchor="middle">installation</text>
+  <text x="60" y="88" font-family="monospace" font-size="5" fill="#57534a" text-anchor="middle">placeholder</text>
+</svg>

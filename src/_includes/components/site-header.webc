@@ -1,10 +1,71 @@
-<header class="site-header">
-  <a class="site-header__title" :href="this.url('/')" @text="this.site.title"></a>
+<!--
+  Fixed header, three columns: menu toggle at the left, title centred, a slot at
+  the right. The centre column is min-content and the left is 1fr, so the title
+  stays optically centred rather than drifting with the button's width.
 
-  <nav class="site-nav" aria-label="Primary">
-    <ul class="site-nav__list">
-      <li><a class="site-nav__link" :href="this.url('/')">Works</a></li>
-      <li><a class="site-nav__link" :href="this.url('/specimen/')">Specimen</a></li>
-    </ul>
-  </nav>
+  There is no search: the site is static with no index behind it, and a search
+  affordance that cannot search is worse than none.
+
+  Props: site (see base.webc).
+-->
+<header class="header">
+  <div class="header__col header__col--left">
+    <button class="header__button" type="button" popovertarget="site-menu"
+            aria-label="Open menu">
+      <svg viewBox="0 0 20 14" width="20" height="14" aria-hidden="true" focusable="false">
+        <path d="M0 1h20M0 7h20M0 13h20" stroke="currentColor" stroke-width="1.4" fill="none"/>
+      </svg>
+    </button>
+  </div>
+
+  <div class="header__col header__col--center">
+    <a class="header__title" :href="this.url('/')" @text="this.site.title"></a>
+  </div>
+
+  <div class="header__col header__col--right"></div>
 </header>
+
+<style webc:scoped>
+  .header {
+    position: fixed;
+    inset-block-start: 0;
+    inset-inline: 0;
+    z-index: 20;
+    display: grid;
+    grid-template-columns: [left] 1fr [center] min-content [right] 1fr;
+    align-items: center;
+    gap: 0.5em;
+    padding: var(--header-pad-y, 0.75rem) var(--header-pad-x, 1rem);
+    block-size: var(--header-height, 3rem);
+    font-size: 0.95rem;
+    background: var(--header-bg, rgb(251 250 248 / 0.92));
+    color: var(--ink, #1a1a1a);
+    backdrop-filter: blur(6px);
+  }
+
+  .header__col { display: flex; align-items: center; }
+  .header__col--left { grid-column: left; }
+  .header__col--center { grid-column: center; justify-content: center; }
+  .header__col--right { grid-column: right; justify-content: flex-end; }
+
+  .header__title {
+    white-space: nowrap;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .header__button {
+    display: flex;
+    border: 0;
+    background: none;
+    padding: 0.25rem;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  /*
+    The cover-page variant (transparent header over the image) lives in
+    layout.css, not here: webc:scoped rewrites these selectors to sit inside the
+    component, so they cannot react to a class on <body>.
+  */
+</style>

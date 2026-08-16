@@ -1,0 +1,7 @@
+---
+layout: base.webc
+title: Works
+permalink: /works/index.html
+eleventyExcludeFromCollections: true
+---
+<work-grid :@works="this.collections.works" :@heading="'Works'"></work-grid>

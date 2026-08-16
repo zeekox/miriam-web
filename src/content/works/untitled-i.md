@@ -7,6 +7,11 @@ dimensions:
   width_cm: 130
 image: src/assets/works/placeholder-01.svg
 alt: Placeholder standing in for a photograph of Untitled I, a large vertical oil painting on linen.
+images:
+  - src: src/assets/works/placeholder-01-detail-a.svg
+    alt: Placeholder standing in for a detail of the painted surface at the lower left edge.
+  - src: src/assets/works/placeholder-01-detail-b.svg
+    alt: Placeholder standing in for an installation view of Untitled I hung on a white wall.
 series: Interiors
 order: 1
 ---

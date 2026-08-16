@@ -1,0 +1,133 @@
+<!--
+  Full-bleed cover slideshow.
+
+  No JavaScript: the track is a scroll-snap container and the arrows are ordinary
+  anchors pointing at the neighbouring slide's id. Following a link scrolls that
+  slide into view and snapping locks it in place. With JS disabled, or if the CSS
+  fails entirely, this degrades to a horizontally scrollable row of images with
+  working links — never to a blank screen.
+
+  Each slide is a <figure> whose caption links through to the work.
+
+  Props: works, url (see index.webc).
+-->
+<section class="cover" aria-label="Selected works">
+  <ul class="cover__track">
+    <li class="cover__slide" webc:for="(work, i) of works" :id="`slide-${i + 1}`">
+      <figure class="cover__figure">
+        <span webc:nokeep
+          @html="this.picture(work.image, { alt: work.alt, sizes: '100vw', className: 'cover__image', eager: i === 0 })"></span>
+
+        <figcaption class="cover__caption">
+          <a class="cover__link" :href="this.url(work.url)">
+            <span class="cover__title" @text="work.title"></span>
+            <span class="cover__meta"
+              @text="`${work.year} · ${work.medium} · ${work.dimensions.height_cm} × ${work.dimensions.width_cm} cm`"></span>
+          </a>
+        </figcaption>
+      </figure>
+
+      <!--
+        Wrap-around: the last slide's "next" points back at the first. Computed
+        here rather than hidden or disabled, so an arrow is never a dead control.
+      -->
+      <a class="cover__arrow cover__arrow--prev"
+         :href="`#slide-${i === 0 ? works.length : i}`"
+         aria-label="Previous work">‹</a>
+      <a class="cover__arrow cover__arrow--next"
+         :href="`#slide-${i + 2 > works.length ? 1 : i + 2}`"
+         aria-label="Next work">›</a>
+    </li>
+  </ul>
+</section>
+
+<style webc:scoped>
+  .cover {
+    /* dvh, not vh: mobile browser chrome must not crop the image. */
+    block-size: 100dvh;
+    inline-size: 100%;
+  }
+
+  .cover__track {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    block-size: 100%;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+  }
+
+  .cover__track::-webkit-scrollbar { display: none; }
+
+  .cover__slide {
+    position: relative;
+    block-size: 100%;
+    scroll-snap-align: center;
+    scroll-snap-stop: always;
+  }
+
+  .cover__figure {
+    margin: 0;
+    block-size: 100%;
+  }
+
+  /* The image fills the viewport; cropping is accepted here because the work
+     pages show every painting uncropped and in full. */
+  .cover__figure :is(img, picture) {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .cover__caption {
+    position: absolute;
+    inset-block-end: var(--cover-caption-inset, 2rem);
+    inset-inline-start: var(--cover-caption-inset, 2rem);
+    max-inline-size: min(28rem, calc(100% - 4rem));
+    background: var(--surface, #fbfaf8);
+    color: var(--ink, #1a1a1a);
+    padding: 0.75rem 1rem;
+  }
+
+  .cover__link {
+    display: grid;
+    gap: 0.25rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .cover__title { font-size: 1.05rem; }
+  .cover__meta { font-size: 0.85rem; opacity: 0.7; }
+
+  .cover__arrow {
+    position: absolute;
+    inset-block-start: 50%;
+    translate: 0 -50%;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    font-size: 2rem;
+    line-height: 1;
+    text-decoration: none;
+    color: var(--ink-on-image, #fff);
+    text-shadow: 0 1px 3px rgb(0 0 0 / 0.45);
+  }
+
+  .cover__arrow--prev { inset-inline-start: 1rem; }
+  .cover__arrow--next { inset-inline-end: 1rem; }
+
+  /* Jumping between slides should not be a smooth ride for anyone who asked for
+     less motion — it becomes an instant cut. */
+  @media (prefers-reduced-motion: reduce) {
+    .cover__track { scroll-behavior: auto; }
+  }
+</style>

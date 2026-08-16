@@ -1,12 +1,13 @@
 ---
 layout: base.webc
-title: Works
+layout_variant: cover
+title: null
+eleventyExcludeFromCollections: true
 ---
-<section class="home__scene" aria-labelledby="home-heading">
-  <h1 class="home__heading" id="home-heading" @text="this.site.title"></h1>
-  <garden-scene></garden-scene>
-</section>
-
-<section class="home__works" aria-label="Works">
-  <work-grid :@works="this.collections.works"></work-grid>
-</section>
+<!--
+  The garden is the empty state: with no works published yet there is nothing to
+  put on a cover, and a blank screen would be worse than a drawing.
+-->
+<cover-slideshow webc:if="this.collections.works.length"
+                 :@works="this.collections.works"></cover-slideshow>
+<garden-scene webc:else></garden-scene>

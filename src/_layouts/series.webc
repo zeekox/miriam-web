@@ -1,0 +1,7 @@
+---
+layout: base.webc
+---
+<work-grid
+  :@works="this.collections.works.filter(w => w.series === this.title)"
+  :@heading="this.title"
+  :@intro="this.content"></work-grid>

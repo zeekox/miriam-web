@@ -36,15 +36,24 @@
       @raw="JSON.stringify({ prerender: [{ where: { href_matches: this.url('/works/*') }, eagerness: 'moderate' }] })"></script>
   </head>
 
-  <body>
+  <!-- `layout` switches page-level chrome; the cover page makes the header transparent. -->
+  <body :class="this.layout_variant ? `layout-${this.layout_variant}` : ''">
     <!--
       WebC components receive no page or global data implicitly — only props. So
       anything a component needs is handed to it explicitly here, which also keeps
       each component's inputs visible at the call site.
     -->
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" :href="'#main'">Skip to content</a>
+
     <site-header :@site="this.site"></site-header>
+    <site-menu
+      :@site="this.site"
+      :@navigation="this.navigation"
+      :@series="this.collections.series || []"
+      :@works="this.collections.works"></site-menu>
+
     <main id="main" class="main" @raw="this.content"></main>
-    <site-footer :@site="this.site"></site-footer>
+
+    <site-footer :@site="this.site" webc:if="this.layout_variant !== 'cover'"></site-footer>
   </body>
 </html>

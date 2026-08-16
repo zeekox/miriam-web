@@ -1,0 +1,167 @@
+<!--
+  Off-canvas menu, slid in from the left.
+
+  Built on the `popover` attribute, so the open/close behaviour, the top layer,
+  light-dismiss (click outside, Escape), and focus handling are all the browser's
+  job — there is no JavaScript here at all. The slide is a transition made
+  possible by @starting-style and transition-behavior: allow-discrete; without
+  those two, an element going display:none could not be animated.
+
+  Props: site, navigation, series, works (see base.webc).
+-->
+<nav id="site-menu" class="menu" popover aria-label="Primary">
+  <div class="menu__head">
+    <a class="menu__title" :href="this.url('/')" @text="this.site.title"></a>
+    <button class="menu__close" type="button" popovertarget="site-menu"
+            popovertargetaction="hide" aria-label="Close menu">&times;</button>
+  </div>
+
+  <ul class="menu__list">
+    <li class="menu__section" webc:for="section of navigation">
+      <a class="menu__section-link" webc:if="section.href" :href="this.url(section.href)"
+         @text="section.label"></a>
+      <span class="menu__section-label" webc:else @text="section.label"></span>
+
+      <ul class="menu__sub" webc:if="section.children && section.children.length">
+        <li webc:for="item of section.children">
+          <a class="menu__link" :href="this.url(item.href)" @text="item.label"></a>
+        </li>
+      </ul>
+
+      <!--
+        Series come from content files, and the count is counted from the works
+        themselves — so neither the list nor the numbers can drift from reality.
+      -->
+      <ul class="menu__sub" webc:if="section.includeSeries && series.length">
+        <li webc:for="entry of series">
+          <a class="menu__link" :href="this.url(entry.url)">
+            <span @text="entry.data.title"></span>
+            <span class="menu__count"
+              @text="works.filter(w => w.series === entry.data.title).length"></span>
+          </a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<style webc:scoped>
+  .menu {
+    /* Popovers are centred in the top layer by default; reset that and pin left. */
+    position: fixed;
+    inset: 0 auto 0 0;
+    margin: 0;
+    inline-size: min(22rem, 82vw);
+    max-block-size: 100dvh;
+    overflow-y: auto;
+    border: 0;
+    border-inline-end: 1px solid var(--rule, #1a1a1a);
+    padding: var(--menu-padding, 1.25rem);
+    background: var(--surface, #fbfaf8);
+    color: var(--ink, #1a1a1a);
+
+    /* Closed state. `overlay` must be in the transition list or the element is
+       yanked out of the top layer before the slide has finished. */
+    translate: -100% 0;
+    opacity: 0;
+    transition:
+      translate 260ms ease,
+      opacity 260ms ease,
+      overlay 260ms allow-discrete,
+      display 260ms allow-discrete;
+  }
+
+  .menu:popover-open {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  /* The state to animate *from* when the element first renders. */
+  @starting-style {
+    .menu:popover-open {
+      translate: -100% 0;
+      opacity: 0;
+    }
+  }
+
+  .menu::backdrop {
+    background: rgb(0 0 0 / 0.28);
+  }
+
+  .menu__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-block-end: 1.5rem;
+  }
+
+  .menu__title {
+    font-size: 1rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .menu__close {
+    border: 0;
+    background: none;
+    padding: 0;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    color: inherit;
+  }
+
+  .menu__list,
+  .menu__sub {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .menu__section {
+    margin-block-end: 1.25rem;
+  }
+
+  .menu__section-link,
+  .menu__section-label {
+    display: block;
+    font-size: 0.95rem;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .menu__sub {
+    margin-block-start: 0.35rem;
+    padding-inline-start: 0.9rem;
+  }
+
+  .menu__link {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-block: 0.15rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.75;
+  }
+
+  .menu__link:hover,
+  .menu__link:focus-visible {
+    opacity: 1;
+  }
+
+  .menu__count {
+    font-variant-numeric: tabular-nums;
+    opacity: 0.5;
+  }
+
+  /* No slide for anyone who asked for less motion; it simply appears. */
+  @media (prefers-reduced-motion: reduce) {
+    .menu {
+      transition: none;
+      translate: 0 0;
+    }
+  }
+</style>

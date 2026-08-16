@@ -1,7 +1,7 @@
 import { pathToFileURL } from 'node:url'
 import pluginWebc from '@11ty/eleventy-plugin-webc'
-import { parseWork, aspectRatio } from './types/content.ts'
-import type { Work, WorkEntry, Dimensions } from './types/content.ts'
+import { parseWork } from './types/content.ts'
+import type { Work, WorkEntry } from './types/content.ts'
 import { renderImage } from './src/_shortcodes/image.ts'
 import { PATH_PREFIX } from './src/_lib/path-prefix.ts'
 import type {
@@ -73,28 +73,15 @@ export default function (eleventyConfig: EleventyConfig): void {
 
   eleventyConfig.addCollection('works', (api) => toWorkEntries(api))
 
-  eleventyConfig.addCollection('worksBySeries', (api) => {
-    const grouped = new Map<string, WorkEntry[]>()
-    for (const work of toWorkEntries(api)) {
-      const key = work.series ?? 'Uncollected'
-      const bucket = grouped.get(key)
-      if (bucket) bucket.push(work)
-      else grouped.set(key, [work])
-    }
-    return [...grouped].map(([series, works]) => ({ series, works }))
-  })
-
   // Named `picture`, not `image`: a shortcode shadows page data of the same name,
   // and every work has an `image` field. `this.image` must stay the file path.
   eleventyConfig.addAsyncShortcode('picture', renderImage as never)
 
-  /** "162 × 130 cm" — an en-dash-free multiplication sign, as galleries set it. */
-  eleventyConfig.addFilter('dimensions', ((d: Dimensions) =>
-    `${d.heightCm} × ${d.widthCm} cm`) as never)
-
-  eleventyConfig.addFilter('aspectRatio', ((d: Dimensions) => aspectRatio(d)) as never)
-
-  eleventyConfig.addFilter('year', (() => new Date().getFullYear()) as never)
+  // No `year`, `dimensions`, or `image` filters here, deliberately. A filter
+  // shadows page data of the same name, so registering one named after a front
+  // matter field makes `this.year` resolve to the function instead of the value
+  // — which renders the function's source into the page rather than erroring.
+  // Templates format these inline instead.
 }
 
 export const config = {

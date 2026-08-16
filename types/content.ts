@@ -12,19 +12,30 @@ export interface Dimensions {
   readonly widthCm: number
 }
 
+/** An additional view of a work: a detail, an install shot, a verso. */
+export interface WorkImage {
+  readonly src: string
+  readonly alt: string
+}
+
 export interface Work {
   readonly title: string
   readonly year: number
   /** e.g. "oil on linen" */
   readonly medium: string
   readonly dimensions: Dimensions
-  /** Path to the source photograph, relative to the repo root. */
+  /** Path to the lead photograph, relative to the repo root. */
   readonly image: string
   /**
    * Required, deliberately not optional. A gallery of paintings without alt text
    * is a gallery that does not exist for some visitors.
    */
   readonly alt: string
+  /**
+   * Further views, shown after the lead image. Each needs its own alt — a detail
+   * shot describes something different from the whole painting.
+   */
+  readonly images?: readonly WorkImage[]
   /** Optional grouping key. */
   readonly series?: string
   /** Optional manual sequencing; falls back to `year`. */
@@ -110,6 +121,24 @@ function parseDimensions(value: unknown, source: string): Dimensions {
   return { heightCm, widthCm }
 }
 
+function parseImages(value: unknown, source: string): readonly WorkImage[] | undefined {
+  if (value === undefined || value === null) return undefined
+  if (!Array.isArray(value)) {
+    throw new ContentError(source, '"images" must be a list when present')
+  }
+  return value.map((entry, i) => {
+    if (!isRecord(entry)) {
+      throw new ContentError(source, `"images[${i}]" must be a mapping of src and alt`)
+    }
+    // Same rule as the lead image: a detail shot with no alt is invisible to
+    // someone using a screen reader, so it fails the build too.
+    return {
+      src: requireString(entry, 'src', `${source} (images[${i}])`),
+      alt: requireString(entry, 'alt', `${source} (images[${i}])`),
+    }
+  })
+}
+
 /**
  * Narrow raw front matter to a `Work`, or throw.
  *
@@ -127,6 +156,7 @@ export function parseWork(raw: unknown, source: string): Work {
     dimensions: parseDimensions(raw['dimensions'], source),
     image: requireString(raw, 'image', source),
     alt: requireString(raw, 'alt', source),
+    images: parseImages(raw['images'], source),
     series: optionalString(raw, 'series', source),
     order: optionalNumber(raw, 'order', source),
   }
