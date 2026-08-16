@@ -184,6 +184,9 @@ Internal links go through Eleventy's `url` filter and image URLs through
 `src/_lib/path-prefix.ts`. Hardcoding an absolute path will work locally and 404
 on a project page — the prefix is the failure mode to watch for.
 
+See [DEPLOY.md](DEPLOY.md) for first-time setup, configuration reference, and
+troubleshooting.
+
 ## Not here yet
 
 - **A CMS.** Deferred deliberately: on GitHub Pages, Decap would need an external
