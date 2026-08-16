@@ -49,6 +49,19 @@
   }
 
   /*
+    The CONTAINER is .index, the wrapper — not .work-grid itself.
+
+    A container query only styles descendants of its container; an element can
+    never respond to a query on itself. With container-type on .work-grid and the
+    rules also targeting .work-grid, every @container block below silently never
+    matched, and the column count sat on its fallback at every width.
+  */
+  .index {
+    container-type: inline-size;
+    container-name: work-grid;
+  }
+
+  /*
     One column on a phone: a painting shown two-up on a 375px screen is barely
     180px wide, which is not looking at a painting.
 
@@ -59,8 +72,6 @@
     without this file knowing.
   */
   .work-grid {
-    container-type: inline-size;
-    container-name: work-grid;
     list-style: none;
     margin: 0;
     padding: 0;
