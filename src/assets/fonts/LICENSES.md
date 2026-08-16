@@ -19,9 +19,14 @@ ever needs Greek, Cyrillic, or extended Latin, re-download the fuller subset.
 | `roboto-variable.woff2` | Roboto | Google Fonts | OFL |
 | `istok-web-400.woff2` | Istok Web | Google Fonts | OFL |
 
-The last three are used by `/texts/`: Work Sans for the headings, Roboto and
-Istok Web for the two specimen paragraphs. Istok Web is not variable, so only its
-regular weight is bundled.
+**Istok Web is the site's body face and Work Sans is the heading face**, set via
+`--font-body` and `--font-display` in `../css/theme.css`. Istok Web is not a
+variable font, so only its regular weight is bundled; add the 700 file if bold
+is ever needed.
+
+**Roboto is currently unused.** It was bundled for an earlier version of
+`/texts/` and kept rather than deleted; an unused `@font-face` costs no download.
+Remove the file, its block in `../css/fonts.css`, and its row above to drop it.
 
 ## Redaction, specifically
 

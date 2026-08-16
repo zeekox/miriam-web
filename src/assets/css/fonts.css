@@ -93,7 +93,11 @@
   font-display: swap;
 }
 
-/* Variable: weight 100–900. */
+/* Variable: weight 100–900.
+   CURRENTLY UNUSED — nothing sets Roboto since Istok Web became the body face.
+   Kept because it was asked for by name and costs nothing until referenced (an
+   unused @font-face triggers no download). Delete this block and the woff2 to
+   drop it for good. */
 @font-face {
   font-family: 'Roboto';
   src: url('/assets/fonts/roboto-variable.woff2') format('woff2-variations');
@@ -143,5 +147,17 @@
   size-adjust: 98%;
   ascent-override: 92%;
   descent-override: 24%;
+  line-gap-override: 0%;
+}
+
+/* Istok Web is the body face for the whole site, so it is the one whose swap
+   would be most visible. This keeps the fallback close enough in metrics that
+   the text does not reflow when the webfont arrives. */
+@font-face {
+  font-family: 'Istok Web fallback';
+  src: local('Arial'), local('Helvetica'), local('sans-serif');
+  size-adjust: 102%;
+  ascent-override: 96%;
+  descent-override: 22%;
   line-gap-override: 0%;
 }

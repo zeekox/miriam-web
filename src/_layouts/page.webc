@@ -26,7 +26,25 @@ layout: base.webc
 
   .page__body {
     max-inline-size: 38rem;
+    line-height: 1.65;
     text-wrap: pretty;
+  }
+
+  /* Rhythm for Markdown content. The article root carries the scoping class, so
+     these reach headings and paragraphs that came from the .md file. */
+  .page__body :is(h2, h3) {
+    margin-block: 2.5rem 0.5rem;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-wrap: balance;
+  }
+
+  .page__body :is(h2, h3):first-child {
+    margin-block-start: 0;
+  }
+
+  .page__body p {
+    margin-block: 0 1.1rem;
   }
 
   .page__garden {

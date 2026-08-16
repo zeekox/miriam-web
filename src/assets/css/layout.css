@@ -22,10 +22,23 @@
   }
 
   body {
-    /* No font-family here — that decision belongs to theme.css, once a pairing
-       has been chosen at /specimen/. */
+    /* Body text inherits from here; the values live in theme.css. */
+    font-family: var(--font-body, system-ui, sans-serif);
     background: var(--page, #fbfaf8);
     color: var(--ink, #1a1a1a);
+  }
+
+  /* Headings take the display face. Everything else — running text, captions,
+     metadata, menu links, buttons — inherits the body face from <body>. */
+  :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--font-display, system-ui, sans-serif);
+  }
+
+  /* The site title is a title even though it is marked up as a link rather than
+     a heading (it repeats on every page, so it is not an <h1>). */
+  .header__title,
+  .menu__title {
+    font-family: var(--font-display, system-ui, sans-serif);
   }
 
   /* The cover page runs the image under a transparent header, so the header

@@ -17,10 +17,14 @@
     /* --measure: ; */          /* max width of the main column */
 
     /* ── Typography ────────────────────────────────────────────────────────── */
-    /* Set these once you have chosen a pairing at /specimen/.
-       The families themselves are declared in fonts.css. */
-    /* --font-display: ; */
-    /* --font-body: ; */
+    /* The families themselves are declared in fonts.css; these choose which is
+       used where. Body text is Istok Web, headings are Work Sans — set here
+       rather than in a component so there is one place to change them.
+
+       /specimen/ still compares the three serif pairings; it overrides these
+       per block, so it keeps working. */
+    --font-body: 'Istok Web', 'Istok Web fallback', system-ui, sans-serif;
+    --font-display: 'Work Sans', system-ui, sans-serif;
 
     /* ── The garden scene ──────────────────────────────────────────────────── */
     /* Every one of these has a fallback baked into the component, so the scene
