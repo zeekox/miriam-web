@@ -1,0 +1,50 @@
+---
+layout: base.webc
+---
+<article class="work">
+  <figure class="work__figure">
+    <!--
+      The image is wrapped in a button so the full-size view opens with the
+      popover attribute alone. No JavaScript is involved in the lightbox.
+    -->
+    <button class="work__zoom" type="button" :popovertarget="`full-${this.page.fileSlug}`"
+            :aria-label="`View ${this.title} full size`">
+      <span webc:nokeep
+        @html="this.picture(this.image, { alt: this.alt, sizes: '(min-width: 60rem) 60rem, 100vw', className: 'work__image', eager: true })"></span>
+    </button>
+
+    <figcaption class="work__caption">
+      <h1 class="work__title" @text="this.title"></h1>
+      <dl class="work__meta">
+        <div class="work__meta-row">
+          <dt>Year</dt>
+          <dd @text="this.year"></dd>
+        </div>
+        <div class="work__meta-row">
+          <dt>Medium</dt>
+          <dd @text="this.medium"></dd>
+        </div>
+        <div class="work__meta-row">
+          <dt>Dimensions</dt>
+          <dd @text="`${this.dimensions.height_cm} × ${this.dimensions.width_cm} cm`"></dd>
+        </div>
+        <div class="work__meta-row" webc:if="this.series">
+          <dt>Series</dt>
+          <dd @text="this.series"></dd>
+        </div>
+      </dl>
+    </figcaption>
+  </figure>
+
+  <div class="work__body" @raw="this.content"></div>
+
+  <p class="work__back"><a :href="this.url('/')">All works</a></p>
+
+  <!-- Popover: a top-layer dialog with no script behind it. -->
+  <div class="lightbox" :id="`full-${this.page.fileSlug}`" popover>
+    <button class="lightbox__close" type="button" :popovertarget="`full-${this.page.fileSlug}`"
+            popovertargetaction="hide">Close</button>
+    <span webc:nokeep
+      @html="this.picture(this.image, { alt: this.alt, sizes: '100vw', className: 'lightbox__image' })"></span>
+  </div>
+</article>

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "lib": ["esnext"],
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "types": ["node"],
+
+    // Node 24 runs .ts directly by stripping types. It never rewrites code, so any
+    // syntax that needs emit (enum, namespace, parameter properties) would break at
+    // runtime. These two options make the compiler reject that syntax up front.
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true,
+
+    // ESM requires the real file extension on disk, so imports are written "./x.ts".
+    "allowImportingTsExtensions": true,
+
+    // tsc is only a checker here — Node is the runtime, there is no build output.
+    "noEmit": true,
+
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "isolatedModules": true,
+    "skipLibCheck": true
+  },
+  "include": ["types/**/*.ts", "src/**/*.ts", "eleventy.config.ts"],
+  "exclude": ["node_modules", "_site"]
+}

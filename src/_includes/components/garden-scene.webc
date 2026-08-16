@@ -1,0 +1,283 @@
+<!--
+  A backyard: two mismatched white monobloc chairs, banana plants, muddy grass.
+
+  An original drawing sharing the subject and mood of the "Debí Tirar Más Fotos"
+  cover — not a trace of that photograph, which is copyrighted.
+
+  Every colour is a custom property with a fallback, so the whole scene can be
+  recoloured from a stylesheet without editing a single path. Sky and ground are
+  CSS gradients painted behind the vector shapes rather than SVG gradients, so
+  they are tunable from the same place as the rest of the site's colour.
+
+  The leaf is defined once in <defs> and placed with <use>, so its shape can be
+  edited in exactly one spot.
+-->
+<div class="garden">
+  <svg
+    class="garden__svg"
+    viewBox="0 0 1200 760"
+    preserveAspectRatio="xMidYMid slice"
+    role="img"
+    aria-labelledby="garden-title garden-desc"
+    xmlns="http://www.w3.org/2000/svg">
+    <title id="garden-title">Two plastic chairs in a backyard</title>
+    <desc id="garden-desc">
+      A flat drawing of a sunlit backyard: banana plants with green fruit behind a
+      muddy grass field, and two mismatched white plastic chairs facing each other.
+    </desc>
+
+    <defs>
+      <!--
+        One banana leaf, drawn pointing right from its base at the origin. The
+        parallel diagonal veins are what make it read as banana rather than as a
+        generic leaf, so they matter more than the outline does.
+      -->
+      <g id="banana-leaf">
+        <path class="garden__leaf" d="M0 0 C62 -56 154 -58 230 -7 C154 40 62 48 0 0 Z"/>
+        <path class="garden__midrib" d="M0 0 C70 -7 160 -11 230 -7"/>
+        <!--
+          Vein endpoints stop short of the blade outline. Overshooting them by
+          even a few units turns the leaf spiky and stops it reading as banana.
+        -->
+        <g class="garden__veins">
+          <path d="M38 -3 L54 -16"/>
+          <path d="M72 -5 L90 -24"/>
+          <path d="M108 -7 L126 -25"/>
+          <path d="M144 -9 L162 -23"/>
+          <path d="M178 -10 L196 -19"/>
+          <path d="M38 -3 L54 12"/>
+          <path d="M72 -5 L90 16"/>
+          <path d="M108 -7 L126 13"/>
+          <path d="M144 -9 L160 7"/>
+        </g>
+      </g>
+
+      <!--
+        A hand of green bananas: a stalk, three tiers of crescent fingers, and the
+        dark blossom hanging below. The blossom is the detail that makes the
+        cluster unmistakable.
+      -->
+      <g id="banana-hand">
+        <path class="garden__stem" d="M-5 -34 H5 V4 H-5 Z"/>
+        <g class="garden__fruit">
+          <g transform="translate(0 2)">
+            <path transform="rotate(-54)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(-18)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(16)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(50)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+          </g>
+          <g transform="translate(0 18) scale(0.92)">
+            <path transform="rotate(-46)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(-14)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(18)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(46)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+          </g>
+          <g transform="translate(0 33) scale(0.8)">
+            <path transform="rotate(-38)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(-6)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+            <path transform="rotate(26)" d="M0 0 C12 1 20 9 22 22 C16 12 8 6 -2 4 Z"/>
+          </g>
+        </g>
+        <path class="garden__blossom" transform="translate(0 52)"
+              d="M0 0 C11 7 13 24 0 42 C-13 24 -11 7 0 0 Z"/>
+      </g>
+    </defs>
+
+    <!-- ground plane -->
+    <path class="garden__ground" d="M0 470 H1200 V760 H0 Z"/>
+    <path class="garden__ground-shade" d="M0 470 H1200 V518 Q600 556 0 518 Z"/>
+
+    <!-- mud patches: the field is not a lawn -->
+    <g class="garden__mud">
+      <ellipse cx="250" cy="622" rx="152" ry="34"/>
+      <ellipse cx="905" cy="584" rx="122" ry="26"/>
+      <ellipse cx="560" cy="704" rx="205" ry="40"/>
+    </g>
+
+    <!-- banana plants, back row -->
+    <g class="garden__foliage garden__foliage--far">
+      <g transform="translate(150 474)">
+        <path class="garden__trunk" d="M-15 0 Q-11 -110 -7 -196 L7 -196 Q11 -110 15 0 Z"/>
+        <g transform="translate(0 -196)">
+          <use href="#banana-leaf" transform="rotate(196) scale(0.86)"/>
+          <use href="#banana-leaf" transform="rotate(-16) scale(0.86)"/>
+          <use href="#banana-leaf" transform="rotate(248) scale(0.72)"/>
+          <use href="#banana-leaf" transform="rotate(-68) scale(0.72)"/>
+        </g>
+      </g>
+
+      <g transform="translate(1046 474)">
+        <path class="garden__trunk" d="M-13 0 Q-10 -96 -6 -172 L6 -172 Q10 -96 13 0 Z"/>
+        <g transform="translate(0 -172)">
+          <use href="#banana-leaf" transform="rotate(190) scale(0.78)"/>
+          <use href="#banana-leaf" transform="rotate(-22) scale(0.78)"/>
+          <use href="#banana-leaf" transform="rotate(254) scale(0.64)"/>
+          <use href="#banana-leaf" transform="rotate(-74) scale(0.6)"/>
+        </g>
+      </g>
+    </g>
+
+    <!-- banana plant, near, with fruit -->
+    <g class="garden__foliage garden__foliage--near" transform="translate(620 474)">
+      <path class="garden__trunk" d="M-19 0 Q-14 -130 -9 -238 L9 -238 Q14 -130 19 0 Z"/>
+      <g transform="translate(0 -238)">
+        <use href="#banana-leaf" transform="rotate(200) scale(1.04)"/>
+        <use href="#banana-leaf" transform="rotate(-12) scale(1.06)"/>
+        <use href="#banana-leaf" transform="rotate(252) scale(0.88)"/>
+        <use href="#banana-leaf" transform="rotate(-64) scale(0.86)"/>
+        <use href="#banana-leaf" transform="rotate(288) scale(0.66)"/>
+      </g>
+      <use href="#banana-hand" transform="translate(26 -206)"/>
+    </g>
+
+    <!-- chair, left: square-backed, planted -->
+    <g class="garden__chair" transform="translate(330 452) scale(0.92)">
+      <ellipse class="garden__chair-shadow" cx="112" cy="248" rx="140" ry="22"/>
+      <path class="garden__chair-back" d="M26 0 Q26 -8 36 -8 H182 Q192 -8 192 0 V112 H26 Z"/>
+      <g class="garden__chair-cut">
+        <rect x="46" y="16" width="18" height="80" rx="7"/>
+        <rect x="82" y="16" width="18" height="80" rx="7"/>
+        <rect x="118" y="16" width="18" height="80" rx="7"/>
+        <rect x="154" y="16" width="18" height="80" rx="7"/>
+      </g>
+      <path class="garden__chair-seat" d="M14 112 H204 L218 156 H0 Z"/>
+      <path class="garden__chair-leg" d="M10 156 L26 156 L34 244 L18 244 Z"/>
+      <path class="garden__chair-leg" d="M192 156 L208 156 L200 244 L184 244 Z"/>
+      <path class="garden__chair-leg garden__chair-leg--back" d="M42 112 L52 112 L56 226 L46 226 Z"/>
+      <path class="garden__chair-leg garden__chair-leg--back" d="M166 112 L176 112 L172 226 L162 226 Z"/>
+    </g>
+
+    <!-- chair, right: round-backed, turned slightly away — the mismatch -->
+    <g class="garden__chair" transform="translate(700 470) scale(0.84) rotate(-4)">
+      <ellipse class="garden__chair-shadow" cx="108" cy="250" rx="138" ry="22"/>
+      <path class="garden__chair-back" d="M24 12 Q108 -26 194 12 V116 H24 Z"/>
+      <g class="garden__chair-cut">
+        <rect x="52" y="34" width="16" height="70" rx="8"/>
+        <rect x="86" y="26" width="16" height="78" rx="8"/>
+        <rect x="120" y="26" width="16" height="78" rx="8"/>
+        <rect x="152" y="34" width="16" height="70" rx="8"/>
+      </g>
+      <path class="garden__chair-seat" d="M12 116 H206 L220 160 H-2 Z"/>
+      <path class="garden__chair-leg" d="M8 160 L24 160 L32 246 L16 246 Z"/>
+      <path class="garden__chair-leg" d="M194 160 L210 160 L202 246 L186 246 Z"/>
+      <path class="garden__chair-leg garden__chair-leg--back" d="M40 116 L50 116 L54 228 L44 228 Z"/>
+      <path class="garden__chair-leg garden__chair-leg--back" d="M168 116 L178 116 L174 228 L164 228 Z"/>
+    </g>
+
+    <!-- grass blades, foreground -->
+    <g class="garden__grass">
+      <path d="M96 706 q6 -30 2 -46 q10 20 8 46 Z"/>
+      <path d="M118 708 q9 -26 14 -40 q-2 22 -6 40 Z"/>
+      <path d="M292 730 q5 -28 1 -42 q10 18 8 42 Z"/>
+      <path d="M312 732 q10 -24 16 -36 q-3 20 -8 36 Z"/>
+      <path d="M470 694 q5 -24 1 -37 q9 16 7 37 Z"/>
+      <path d="M742 718 q6 -30 2 -45 q10 19 8 45 Z"/>
+      <path d="M764 720 q10 -26 16 -38 q-3 21 -8 38 Z"/>
+      <path d="M974 692 q5 -25 1 -38 q9 16 7 38 Z"/>
+      <path d="M1122 726 q6 -27 2 -41 q10 18 8 41 Z"/>
+      <path d="M1142 728 q9 -23 15 -34 q-3 19 -7 34 Z"/>
+    </g>
+  </svg>
+</div>
+
+<style webc:scoped>
+  /*
+    PROVISIONAL COLOUR — every value here is a fallback behind a custom property.
+    Set the properties in assets/css/theme.css to recolour the scene; you should
+    never need to edit the SVG itself.
+  */
+  .garden {
+    /* Sky and ground as CSS fields, painted behind the vector shapes. */
+    background-image: linear-gradient(
+      to bottom,
+      var(--garden-sky-top, #cfe3e6) 0%,
+      var(--garden-sky-bottom, #eae4d3) 62%
+    );
+    line-height: 0;
+  }
+
+  .garden__svg {
+    inline-size: 100%;
+    block-size: auto;
+  }
+
+  .garden__ground { fill: var(--garden-ground, #7f8f4e); }
+  .garden__ground-shade { fill: var(--garden-ground-shade, #6d7f42); }
+  .garden__mud { fill: var(--garden-mud, #8a7550); opacity: var(--garden-mud-opacity, 0.5); }
+  .garden__grass { fill: var(--garden-grass, #56682f); }
+
+  .garden__trunk { fill: var(--garden-trunk, #7d8c46); }
+  .garden__stem { fill: var(--garden-stem, #6b7f3a); }
+  .garden__leaf { fill: var(--garden-leaf, #4f6b2f); }
+  .garden__midrib {
+    fill: none;
+    stroke: var(--garden-midrib, #6f8a41);
+    stroke-width: 5;
+    stroke-linecap: round;
+  }
+  .garden__veins {
+    fill: none;
+    stroke: var(--garden-vein, #3f5726);
+    stroke-width: 2;
+    stroke-linecap: round;
+    opacity: var(--garden-vein-opacity, 0.55);
+  }
+  .garden__fruit { fill: var(--garden-fruit, #a8bd45); }
+  .garden__blossom { fill: var(--garden-blossom, #7a3550); }
+
+  /* The far row sits back by being darker and flatter. */
+  .garden__foliage--far .garden__leaf { fill: var(--garden-leaf-far, #3d5526); }
+  .garden__foliage--far .garden__trunk { fill: var(--garden-trunk-far, #64743a); }
+  .garden__foliage--far .garden__midrib { stroke: var(--garden-midrib-far, #55703a); }
+  .garden__foliage--far .garden__veins { opacity: 0.35; }
+
+  .garden__chair-back,
+  .garden__chair-seat,
+  .garden__chair-leg { fill: var(--garden-chair, #f4f3ef); }
+  .garden__chair-leg--back { fill: var(--garden-chair-shade, #d5d3c9); }
+  .garden__chair-cut { fill: var(--garden-chair-gap, #93a35f); }
+  .garden__chair-shadow {
+    fill: var(--garden-shadow, #3c4a24);
+    opacity: var(--garden-shadow-opacity, 0.28);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    .garden {
+      background-image: linear-gradient(
+        to bottom,
+        var(--garden-sky-top, #22303a) 0%,
+        var(--garden-sky-bottom, #2c2f26) 62%
+      );
+    }
+    .garden__ground { fill: var(--garden-ground, #3a4526); }
+    .garden__ground-shade { fill: var(--garden-ground-shade, #313c20); }
+    .garden__grass { fill: var(--garden-grass, #2c3a1c); }
+    .garden__trunk { fill: var(--garden-trunk, #4a5a2c); }
+    .garden__leaf { fill: var(--garden-leaf, #2f4420); }
+    .garden__midrib { stroke: var(--garden-midrib, #486030); }
+    .garden__foliage--far .garden__leaf { fill: var(--garden-leaf-far, #26381a); }
+    .garden__foliage--far .garden__trunk { fill: var(--garden-trunk-far, #3b4a24); }
+    .garden__chair-back,
+    .garden__chair-seat,
+    .garden__chair-leg { fill: var(--garden-chair, #dcdad2); }
+    .garden__chair-cut { fill: var(--garden-chair-gap, #3a4526); }
+  }
+
+  /*
+    Motion is opt-in and off by default: it only runs for visitors who have not
+    asked for reduced motion. Delete this block to have a completely still scene.
+  */
+  @media (prefers-reduced-motion: no-preference) {
+    .garden__foliage {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: garden-sway 11s ease-in-out infinite alternate;
+    }
+    .garden__foliage--far { animation-duration: 14s; }
+  }
+
+  @keyframes garden-sway {
+    from { rotate: -0.6deg; }
+    to { rotate: 0.6deg; }
+  }
+</style>

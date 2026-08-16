@@ -1,0 +1,50 @@
+<!doctype html>
+<html :lang="this.site.lang">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title @text="this.title ? `${this.title} — ${this.site.title}` : this.site.title"></title>
+    <meta name="description" :content="this.description || this.site.description">
+
+    <!--
+      base.css must load first: it declares the cascade layer order that every
+      other stylesheet depends on. Fonts are self-hosted, so there is no
+      third-party origin to preconnect to.
+
+      webc:keep leaves these as real <link> elements. Without it WebC would inline
+      them into its component bundle, collapsing the layer ordering these files
+      exist to establish.
+    -->
+    <link rel="stylesheet" :href="this.url('/assets/css/base.css')" webc:keep>
+    <link rel="stylesheet" :href="this.url('/assets/css/fonts.css')" webc:keep>
+    <link rel="stylesheet" :href="this.url('/assets/css/layout.css')" webc:keep>
+    <link rel="stylesheet" :href="this.url('/assets/css/theme.css')" webc:keep>
+
+    <!--
+      CSS from the WebC components used on this page, wrapped in the `components`
+      layer. Without the wrapper it would be unlayered and therefore beat
+      theme.css — which would leave the artist fighting the scaffold.
+    -->
+    <style webc:keep @raw="`@layer components { ${this.getBundle('css')} }`"></style>
+
+    <!--
+      Prerender a work page on hover. Chrome acts on this; every other browser
+      ignores an unknown script type, so it costs nothing where unsupported.
+    -->
+    <script type="speculationrules" webc:keep
+      @raw="JSON.stringify({ prerender: [{ where: { href_matches: this.url('/works/*') }, eagerness: 'moderate' }] })"></script>
+  </head>
+
+  <body>
+    <!--
+      WebC components receive no page or global data implicitly — only props. So
+      anything a component needs is handed to it explicitly here, which also keeps
+      each component's inputs visible at the call site.
+    -->
+    <a class="skip-link" href="#main">Skip to content</a>
+    <site-header :@site="this.site"></site-header>
+    <main id="main" class="main" @raw="this.content"></main>
+    <site-footer :@site="this.site"></site-footer>
+  </body>
+</html>

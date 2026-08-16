@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" width="40" height="40" role="img" aria-label="Placeholder standing in for a photograph of a drawing">
+  <!-- Deliberately inert: a neutral field at the work's true aspect ratio.
+       This is scaffolding, not artwork. Replace with a photograph. -->
+  <rect width="40" height="40" fill="#d9d5cd"/>
+  <rect x="0.5" y="0.5" width="39" height="39" fill="none" stroke="#8c877d" stroke-width="0.75"/>
+  <path d="M0 0 L40 40 M40 0 L0 40" stroke="#8c877d" stroke-width="0.35" opacity="0.45"/>
+  <text x="20" y="19" font-family="monospace" font-size="3.4" fill="#57534a" text-anchor="middle">40 × 40 cm</text>
+  <text x="20" y="24" font-family="monospace" font-size="2.6" fill="#57534a" text-anchor="middle">placeholder</text>
+</svg>

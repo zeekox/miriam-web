@@ -1,0 +1,170 @@
+---
+layout: base.webc
+title: Type specimen
+description: Three typeface pairings shown at working sizes, for choosing between.
+---
+<div class="specimen">
+  <header class="specimen__intro">
+    <h1>Type specimen</h1>
+    <p>
+      Three pairings, each setting a work title beside a paragraph of running text
+      at the sizes they would actually be used. Nothing on the rest of the site
+      sets a <code>font-family</code>: once you have chosen, set
+      <code>--font-display</code> and <code>--font-body</code> in
+      <code>theme.css</code> and delete the two you did not pick.
+    </p>
+    <p class="specimen__note">
+      All six faces are self-hosted and under the Open Font License. Redaction is
+      the odd one out: it is not variable, and ships instead in seven grades of
+      progressive degradation.
+    </p>
+  </header>
+
+  <section class="pairing" aria-labelledby="pairing-a">
+    <h2 class="pairing__label" id="pairing-a">A — Redaction &amp; Fraunces</h2>
+    <div class="pairing__demo" style="--display: 'Redaction'; --body: 'Fraunces', 'Fraunces fallback', serif;">
+      <div class="pairing__display">
+        <p class="pairing__title">Untitled I</p>
+        <p class="pairing__meta">2024 · oil on linen · 162 × 130 cm</p>
+      </div>
+      <div class="pairing__body">
+        <p>
+          The paint is thin at the edges and heaped at the centre, so the canvas
+          reads as a surface before it reads as a picture. Standing close, the
+          weave shows through; at four metres it closes into a single field.
+        </p>
+        <p>
+          Handling, weight, colour, scale — the vocabulary a catalogue entry needs,
+          set at the size a catalogue entry is actually read.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pairing" aria-labelledby="pairing-b">
+    <h2 class="pairing__label" id="pairing-b">B — Bricolage Grotesque &amp; Literata</h2>
+    <div class="pairing__demo" style="--display: 'Bricolage Grotesque'; --body: 'Literata', 'Literata fallback', serif;">
+      <div class="pairing__display">
+        <p class="pairing__title">Untitled I</p>
+        <p class="pairing__meta">2024 · oil on linen · 162 × 130 cm</p>
+      </div>
+      <div class="pairing__body">
+        <p>
+          The paint is thin at the edges and heaped at the centre, so the canvas
+          reads as a surface before it reads as a picture. Standing close, the
+          weave shows through; at four metres it closes into a single field.
+        </p>
+        <p>
+          Handling, weight, colour, scale — the vocabulary a catalogue entry needs,
+          set at the size a catalogue entry is actually read.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pairing" aria-labelledby="pairing-c">
+    <h2 class="pairing__label" id="pairing-c">C — Bodoni Moda &amp; Source Serif 4</h2>
+    <div class="pairing__demo" style="--display: 'Bodoni Moda'; --body: 'Source Serif 4', 'Source Serif 4 fallback', serif;">
+      <div class="pairing__display">
+        <p class="pairing__title">Untitled I</p>
+        <p class="pairing__meta">2024 · oil on linen · 162 × 130 cm</p>
+      </div>
+      <div class="pairing__body">
+        <p>
+          The paint is thin at the edges and heaped at the centre, so the canvas
+          reads as a surface before it reads as a picture. Standing close, the
+          weave shows through; at four metres it closes into a single field.
+        </p>
+        <p>
+          Handling, weight, colour, scale — the vocabulary a catalogue entry needs,
+          set at the size a catalogue entry is actually read.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pairing" aria-labelledby="pairing-grades">
+    <h2 class="pairing__label" id="pairing-grades">Redaction, on its own terms</h2>
+    <p class="specimen__note">
+      Only the undegraded cut is bundled. The other six grades are separate files;
+      if the degradation is the reason to choose it, they are worth downloading.
+    </p>
+    <p class="pairing__title" style="--display: 'Redaction';">Debí tirar más fotos</p>
+  </section>
+</div>
+
+<style webc:scoped>
+  /*
+    PROVISIONAL — this page is a measuring instrument, not a designed page. It
+    sets sizes only so the comparison is fair, and deliberately makes no other
+    choices. Delete the whole page once you have picked a pairing.
+  */
+  .specimen {
+    display: grid;
+    gap: 3rem;
+    padding-block: 2rem;
+  }
+
+  .specimen__intro {
+    max-inline-size: 42rem;
+  }
+
+  .specimen__note {
+    font-size: 0.9rem;
+    opacity: 0.75;
+  }
+
+  .pairing {
+    border-block-start: 1px solid currentColor;
+    padding-block-start: 1.5rem;
+  }
+
+  .pairing__label {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.6;
+    font-weight: 400;
+  }
+
+  /* Title beside paragraph, so the two faces are judged in relation rather than
+     one after the other. Stacks when there is not room for both. */
+  .pairing__demo {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  @media (min-width: 48rem) {
+    .pairing__demo {
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    }
+  }
+
+  .pairing__title {
+    font-family: var(--display), serif;
+    font-size: clamp(2rem, 5vw, 3.25rem);
+    line-height: 1.05;
+    margin: 0;
+  }
+
+  .pairing__meta {
+    font-family: var(--body), serif;
+    font-size: 0.95rem;
+    margin-block: 0.75rem 0;
+    opacity: 0.75;
+  }
+
+  .pairing__body {
+    font-family: var(--body), serif;
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    max-inline-size: 38rem;
+    text-wrap: pretty;
+  }
+
+  .pairing__body p {
+    margin-block: 0 1rem;
+  }
+</style>

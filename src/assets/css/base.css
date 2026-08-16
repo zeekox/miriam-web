@@ -1,0 +1,91 @@
+/*
+  base.css — structural only.
+
+  There is no colour, type scale, or spacing system in this file, and there should
+  not be. It declares the cascade layer order for the whole site and sets the few
+  behaviours that are correctness rather than taste.
+*/
+
+/* Loaded first, so this single line decides precedence for everything that
+   follows. `theme` is last, which means your file always wins. */
+@layer reset, base, components, layout, theme;
+
+/* Top-level at-rule: cross-document view transitions between index and work
+   pages. Browsers without support simply navigate normally. */
+@view-transition {
+  navigation: auto;
+}
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+  }
+
+  /* Images must never overflow their column or shift layout while loading.
+     `height: auto` preserves the intrinsic ratio from the width/height attrs. */
+  img,
+  svg,
+  video {
+    max-inline-size: 100%;
+  }
+
+  img {
+    block-size: auto;
+  }
+
+  /* Inherit rather than impose: no font-family is chosen here. */
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* Keyboard users must be able to see where they are. Remove this only if you
+     replace it with something at least as visible. */
+  :focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  .skip-link {
+    position: absolute;
+    inset-inline-start: 0;
+    inset-block-start: 0;
+    padding: 0.5rem 1rem;
+    translate: 0 -100%;
+  }
+
+  .skip-link:focus {
+    translate: 0 0;
+  }
+
+  /*
+    A global stop switch for motion. Every animation on the site is written to be
+    cancelled by this, so honouring the preference is not left to each component.
+  */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+      view-transition-name: none !important;
+    }
+  }
+}

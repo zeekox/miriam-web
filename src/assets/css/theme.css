@@ -1,0 +1,49 @@
+/*
+  theme.css — yours.
+
+  This file is deliberately empty of values. It loads last and sits in the last
+  cascade layer, so anything you write here wins over the scaffold without needing
+  !important or higher specificity.
+
+  Below are the custom properties the templates and components already read. They
+  are listed, unset, as hooks — naming them is plumbing, choosing them is not my
+  call. Uncomment and give them values, or ignore them entirely and write your own
+  CSS from scratch.
+*/
+
+@layer theme {
+  :root {
+    /* ── Layout ────────────────────────────────────────────────────────────── */
+    /* --measure: ; */          /* max width of the main column */
+
+    /* ── Typography ────────────────────────────────────────────────────────── */
+    /* Set these once you have chosen a pairing at /specimen/.
+       The families themselves are declared in fonts.css. */
+    /* --font-display: ; */
+    /* --font-body: ; */
+
+    /* ── The garden scene ──────────────────────────────────────────────────── */
+    /* Every one of these has a fallback baked into the component, so the scene
+       renders untouched until you override it. */
+    /* --garden-sky-top: ; */
+    /* --garden-sky-bottom: ; */
+    /* --garden-ground: ; */
+    /* --garden-ground-shade: ; */
+    /* --garden-mud: ; */
+    /* --garden-mud-opacity: ; */
+    /* --garden-grass: ; */
+    /* --garden-stem: ; */
+    /* --garden-leaf: ; */
+    /* --garden-leaf-far: ; */
+    /* --garden-fruit: ; */
+    /* --garden-blossom: ; */
+    /* --garden-trunk: ; */
+    /* --garden-midrib: ; */
+    /* --garden-vein: ; */
+    /* --garden-chair: ; */
+    /* --garden-chair-shade: ; */
+    /* --garden-chair-gap: ; */
+    /* --garden-shadow: ; */
+    /* --garden-shadow-opacity: ; */
+  }
+}

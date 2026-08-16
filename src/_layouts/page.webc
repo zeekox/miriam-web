@@ -1,0 +1,7 @@
+---
+layout: base.webc
+---
+<article class="page">
+  <h1 class="page__title" @text="this.title"></h1>
+  <div class="page__body" @raw="this.content"></div>
+</article>

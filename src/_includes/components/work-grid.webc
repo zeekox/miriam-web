@@ -1,0 +1,38 @@
+<!--
+  Index of works.
+
+  Sized by container queries rather than viewport media queries, so the grid
+  responds to the space it is actually given. Drop this component into a narrow
+  column or a full-bleed section and it adapts without either caller knowing
+  about the other.
+
+  Takes the collection as a prop rather than reaching for `collections` itself, so
+  it can render any list of works — all of them, or one series.
+  Usage: <work-grid :@works="collections.works"></work-grid>
+-->
+<ul class="work-grid">
+  <li class="work-grid__item" webc:for="work of works">
+    <a class="work-grid__link" :href="this.url(work.url)">
+      <figure class="work-grid__figure">
+        <span
+          @html="picture(work.image, { alt: work.alt, sizes: '(min-width: 60rem) 30rem, 90vw', className: 'work-grid__image' })"
+          webc:nokeep></span>
+        <figcaption class="work-grid__caption">
+          <span class="work-grid__title" @text="work.title"></span>
+          <span class="work-grid__year" @text="work.year"></span>
+        </figcaption>
+      </figure>
+    </a>
+  </li>
+</ul>
+
+<style webc:scoped>
+  /*
+    Structural only — this establishes the container, not a look.
+    The visual grid lives in assets/css/layout.css so it is somewhere findable.
+  */
+  .work-grid {
+    container-type: inline-size;
+    container-name: work-grid;
+  }
+</style>
