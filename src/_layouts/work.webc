@@ -76,7 +76,14 @@ layout: base.webc
     color: var(--ink-muted, #5a5a5a);
   }
 
+  /*
+    The container is .work__images and the queries below target its children.
+    Container and target must never be the same element — a container query only
+    styles descendants, so a rule on the container itself silently never matches.
+  */
   .work__images {
+    container-type: inline-size;
+    container-name: work-images;
     display: flex;
     flex-flow: row wrap;
     gap: var(--images-gap, 1rem);
@@ -104,6 +111,9 @@ layout: base.webc
     canvas sized on width alone would push the caption and everything below it
     off the bottom. min() takes whichever binds first; --aspect is the work's
     true width ÷ height.
+
+    A media query on purpose, not a container query: the question here is the
+    shape of the viewport, which no container knows about.
   */
   @media (min-width: 48rem) {
     .work__figure--lead .work__zoom {
@@ -111,20 +121,28 @@ layout: base.webc
     }
   }
 
-  /* Further views: one column, then two, then Rebord's thirds. */
+  /*
+    Further views: one column, then two, then Rebord's thirds.
+
+    The thresholds are the project's breakpoints, but read against the CONTAINER's
+    width, not the viewport's. The column is capped at --measure and inset by the
+    gutter, so it crosses each threshold slightly later than the viewport does —
+    which is the correct behaviour, since what matters is the space the images
+    actually have.
+  */
   .work__figure--secondary {
     flex-basis: 100%;
   }
 
   /* sm */
-  @media (min-width: 40rem) {
+  @container work-images (min-width: 40rem) {
     .work__figure--secondary {
       flex-basis: calc(50% - var(--images-gap, 1rem) / 2);
     }
   }
 
   /* lg */
-  @media (min-width: 64rem) {
+  @container work-images (min-width: 64rem) {
     .work__figure--secondary {
       flex-basis: calc(33.3333% - var(--images-gap, 1rem) * 2 / 3);
     }
