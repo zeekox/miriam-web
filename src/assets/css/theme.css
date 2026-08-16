@@ -16,6 +16,12 @@
     /* ── Layout ────────────────────────────────────────────────────────────── */
     /* --measure: ; */          /* max width of the main column */
 
+    /* ── Colour ────────────────────────────────────────────────────────────── */
+    /* Muted text is a colour, never a stacked `opacity`. Opacity compounds
+       through nested elements — a 0.75 parent with a 0.5 child lands at 0.375,
+       which silently fails contrast. This value holds ~7:1 on --page. */
+    --ink-muted: #5a5a5a;
+
     /* ── Typography ────────────────────────────────────────────────────────── */
     /* The families themselves are declared in fonts.css; these choose which is
        used where. Body text is Istok Web, headings are Work Sans — set here

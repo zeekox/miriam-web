@@ -32,12 +32,14 @@
     inset-inline: 0;
     z-index: 20;
     display: grid;
-    grid-template-columns: [left] 1fr [center] min-content [right] 1fr;
+    /* minmax(0, …) so the centre column may shrink below its content on a narrow
+       screen instead of pushing the header wider than the viewport. */
+    grid-template-columns: [left] 1fr [center] minmax(0, max-content) [right] 1fr;
     align-items: center;
     gap: 0.5em;
-    padding: var(--header-pad-y, 0.75rem) var(--header-pad-x, 1rem);
+    padding-inline: var(--gutter, 1rem);
     block-size: var(--header-height, 3rem);
-    font-size: 0.95rem;
+    font-size: 0.875rem;
     background: var(--header-bg, rgb(251 250 248 / 0.92));
     color: var(--ink, #1a1a1a);
     backdrop-filter: blur(6px);
@@ -48,17 +50,30 @@
   .header__col--center { grid-column: center; justify-content: center; }
   .header__col--right { grid-column: right; justify-content: flex-end; }
 
+  /* Truncate rather than wrap or overflow: the header is a fixed-height bar. */
   .header__title {
     white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-inline-size: 100%;
     text-decoration: none;
     color: inherit;
   }
 
+  @media (min-width: 48rem) {
+    .header { font-size: 0.95rem; }
+  }
+
+  /* 44px square: the primary control on every page, so it gets a real target. */
   .header__button {
-    display: flex;
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    margin-inline-start: -0.5rem;
     border: 0;
     background: none;
-    padding: 0.25rem;
+    padding: 0;
     cursor: pointer;
     color: inherit;
   }

@@ -13,12 +13,48 @@
   ─────────────────────────────────────────────────────────────────────────────
 */
 
+/*
+  ── Breakpoints ───────────────────────────────────────────────────────────────
+
+  One scale, used everywhere. Custom properties cannot be used in a media query
+  condition, so these values are written literally — but they are written the
+  same everywhere, and this is the list to change.
+
+      sm    40rem    640px
+      md    48rem    768px
+      lg    64rem   1024px
+      xl    80rem   1280px
+
+  In rem rather than px on purpose: a media query's rem is the browser's initial
+  font size, unaffected by any root font-size, so someone who has set a larger
+  default text size gets the simpler layout at the point it actually helps them.
+
+  Everything is mobile-first — the base rules are the single-column layout, and
+  each min-width query adds columns. Nothing uses max-width, so a rule is only
+  ever added, never undone.
+*/
+
 @layer layout {
   :root {
     --header-height: 3rem;
     --gutter: 1rem;
     --measure: 72rem;
-    --images-gap: 1rem;
+    --images-gap: 0.75rem;
+  }
+
+  /* Room to breathe once there is room to spare. */
+  @media (min-width: 48rem) {
+    :root {
+      --gutter: 1.5rem;
+      --images-gap: 1rem;
+    }
+  }
+
+  @media (min-width: 64rem) {
+    :root {
+      --header-height: 3.5rem;
+      --gutter: 2rem;
+    }
   }
 
   body {
@@ -57,12 +93,20 @@
     overflow-y: hidden;
   }
 
+  /*
+    The header is fixed, so every page needs to start below it. Done once here
+    rather than per component — /specimen/ was missing its own copy and rendered
+    under the header.
+  */
   .main {
     min-block-size: 100dvh;
+    padding-block-start: var(--header-height, 3rem);
   }
 
+  /* The cover is the exception: it runs full-bleed beneath a transparent header. */
   body.layout-cover .main {
     min-block-size: 0;
+    padding-block-start: 0;
   }
 
   /* Full-screen lightbox, opened by the popover attribute alone. */

@@ -50,7 +50,8 @@
       :@site="this.site"
       :@navigation="this.navigation"
       :@series="this.collections.series || []"
-      :@works="this.collections.works"></site-menu>
+      :@works="this.collections.works"
+      :@current="this.page.url"></site-menu>
 
     <main id="main" class="main" @raw="this.content"></main>
 

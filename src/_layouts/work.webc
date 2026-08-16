@@ -19,7 +19,7 @@ layout: base.webc
       <button class="work__zoom" type="button" :popovertarget="`full-${this.page.fileSlug}`"
               :aria-label="`View ${this.title} full size`">
         <span webc:nokeep
-          @html="this.picture(this.image, { alt: this.alt, sizes: '(min-width: 60rem) 70vh, 100vw', className: 'work__image', eager: true })"></span>
+          @html="this.picture(this.image, { alt: this.alt, sizes: '(min-width: 64rem) 60rem, 100vw', className: 'work__image', eager: true })"></span>
       </button>
     </figure>
 
@@ -27,7 +27,7 @@ layout: base.webc
     <figure class="work__figure work__figure--secondary"
             webc:for="view of (this.images || [])">
       <span webc:nokeep
-        @html="this.picture(view.src, { alt: view.alt, sizes: '(min-width: 60rem) 30vw, 100vw', className: 'work__image' })"></span>
+        @html="this.picture(view.src, { alt: view.alt, sizes: '(min-width: 64rem) 24rem, (min-width: 40rem) 50vw, 100vw', className: 'work__image' })"></span>
       <figcaption class="work__view-caption" @text="view.alt"></figcaption>
     </figure>
   </div>
@@ -40,8 +40,12 @@ layout: base.webc
     <a webc:if="this.seriesUrl" :href="this.url(this.seriesUrl)" @text="this.series"></a>
   </nav>
 
-  <!-- Popover: a top-layer dialog with no script behind it. -->
-  <div class="lightbox" :id="`full-${this.page.fileSlug}`" popover>
+  <!--
+    Popover: a top-layer dialog with no script behind it. It needs its own
+    accessible name — without one it announces as an unnamed group.
+  -->
+  <div class="lightbox" :id="`full-${this.page.fileSlug}`" popover
+       role="dialog" aria-modal="true" :aria-label="`${this.title}, full size`">
     <button class="lightbox__close" type="button" :popovertarget="`full-${this.page.fileSlug}`"
             popovertargetaction="hide">Close</button>
     <span webc:nokeep
@@ -51,7 +55,6 @@ layout: base.webc
 
 <style webc:scoped>
   .work {
-    padding-block-start: var(--header-height, 3rem);
     padding-inline: var(--gutter, 1rem);
     max-inline-size: var(--measure, 72rem);
     margin-inline: auto;
@@ -70,7 +73,7 @@ layout: base.webc
   .work__meta {
     margin: 0.35rem 0 0;
     font-size: 0.9rem;
-    opacity: 0.7;
+    color: var(--ink-muted, #5a5a5a);
   }
 
   .work__images {
@@ -88,14 +91,43 @@ layout: base.webc
     flex-basis: 100%;
   }
 
-  /* min() of "as tall as 70vh allows" and "as wide as the column allows" —
-     whichever binds first. --aspect is the work's true width ÷ height. */
+  /*
+    On a phone the lead image is simply full width: the page scrolls vertically,
+    so a tall painting costs nothing but a scroll.
+  */
   .work__figure--lead .work__zoom {
-    inline-size: min(70vh * var(--aspect, 1), 100%);
+    inline-size: 100%;
   }
 
+  /*
+    From md up, cap by viewport HEIGHT as well: on a landscape screen a tall
+    canvas sized on width alone would push the caption and everything below it
+    off the bottom. min() takes whichever binds first; --aspect is the work's
+    true width ÷ height.
+  */
+  @media (min-width: 48rem) {
+    .work__figure--lead .work__zoom {
+      inline-size: min(70vh * var(--aspect, 1), 100%);
+    }
+  }
+
+  /* Further views: one column, then two, then Rebord's thirds. */
   .work__figure--secondary {
-    flex-basis: calc(33.3333% - var(--images-gap, 1rem) * 2 / 3);
+    flex-basis: 100%;
+  }
+
+  /* sm */
+  @media (min-width: 40rem) {
+    .work__figure--secondary {
+      flex-basis: calc(50% - var(--images-gap, 1rem) / 2);
+    }
+  }
+
+  /* lg */
+  @media (min-width: 64rem) {
+    .work__figure--secondary {
+      flex-basis: calc(33.3333% - var(--images-gap, 1rem) * 2 / 3);
+    }
   }
 
   .work__zoom {
@@ -115,7 +147,7 @@ layout: base.webc
   .work__view-caption {
     margin-block-start: 0.4rem;
     font-size: 0.8rem;
-    opacity: 0.65;
+    color: var(--ink-muted, #5a5a5a);
   }
 
   .work__body {
@@ -131,8 +163,4 @@ layout: base.webc
     font-size: 0.9rem;
   }
 
-  /* Below the fold of a phone, thirds are unreadable — stack them. */
-  @media (max-width: 48rem) {
-    .work__figure--secondary { flex-basis: 100%; }
-  }
 </style>

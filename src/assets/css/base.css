@@ -61,16 +61,55 @@
     outline-offset: 2px;
   }
 
+  /*
+    The skip link must be genuinely visible when focused. Previously it only
+    translated into view with no background of its own, so it landed as unstyled
+    text over whatever was beneath it — present to a screen reader, invisible to
+    a sighted keyboard user, which is the group it exists for.
+  */
   .skip-link {
-    position: absolute;
-    inset-inline-start: 0;
-    inset-block-start: 0;
-    padding: 0.5rem 1rem;
-    translate: 0 -100%;
+    position: fixed;
+    inset-inline-start: 0.5rem;
+    inset-block-start: 0.5rem;
+    z-index: 100;
+    padding: 0.75rem 1rem;
+    background: var(--surface, #fbfaf8);
+    color: var(--ink, #1a1a1a);
+    border: 1px solid currentColor;
+    text-decoration: none;
+    translate: 0 -200%;
   }
 
-  .skip-link:focus {
+  .skip-link:focus-visible {
     translate: 0 0;
+  }
+
+  /*
+    Minimum target size (WCAG 2.5.8). Applied to every control rather than
+    remembered per component.
+  */
+  :is(a, button, [role='button'], summary) {
+    min-block-size: 24px;
+  }
+
+  /*
+    Available to assistive technology, absent from the visual design. Used for
+    headings that a page needs structurally but does not want to show — the
+    cover page being the case in point.
+
+    clip-path rather than `display: none` or `visibility: hidden`, either of
+    which would remove it from the accessibility tree as well.
+  */
+  .visually-hidden:not(:focus):not(:active) {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    border: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    clip-path: inset(50%);
   }
 
   /*

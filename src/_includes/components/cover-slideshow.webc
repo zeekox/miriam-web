@@ -12,7 +12,13 @@
   Props: works, url (see index.webc).
 -->
 <section class="cover" aria-label="Selected works">
-  <ul class="cover__track">
+  <!--
+    tabindex="0" makes the scroll container reachable by keyboard. A scrollable
+    region that cannot be focused is unreachable without a mouse (WCAG 2.1.1);
+    browsers are starting to do this automatically, but not all of them yet. The
+    role and label stop it being an unlabelled tab stop.
+  -->
+  <ul class="cover__track" tabindex="0" role="group" aria-label="Works, scrollable">
     <li class="cover__slide" webc:for="(work, i) of works" :id="`slide-${i + 1}`">
       <figure class="cover__figure">
         <span webc:nokeep
@@ -86,14 +92,26 @@
     object-fit: cover;
   }
 
+  /*
+    On a phone the caption spans the width, clear of the arrows. From md it
+    becomes the small inset block the reference uses.
+  */
   .cover__caption {
     position: absolute;
-    inset-block-end: var(--cover-caption-inset, 2rem);
-    inset-inline-start: var(--cover-caption-inset, 2rem);
-    max-inline-size: min(28rem, calc(100% - 4rem));
+    inset-block-end: 1rem;
+    inset-inline: 1rem;
     background: var(--surface, #fbfaf8);
     color: var(--ink, #1a1a1a);
     padding: 0.75rem 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .cover__caption {
+      inset-block-end: var(--cover-caption-inset, 2rem);
+      inset-inline-start: var(--cover-caption-inset, 2rem);
+      inset-inline-end: auto;
+      max-inline-size: min(28rem, calc(100% - 4rem));
+    }
   }
 
   .cover__link {
@@ -104,7 +122,7 @@
   }
 
   .cover__title { font-size: 1.05rem; }
-  .cover__meta { font-size: 0.85rem; opacity: 0.7; }
+  .cover__meta { font-size: 0.85rem; color: var(--ink-muted, #5a5a5a); }
 
   .cover__arrow {
     position: absolute;
@@ -113,6 +131,7 @@
     z-index: 2;
     display: grid;
     place-items: center;
+    /* 44px: a comfortable touch target, well over the 24px minimum. */
     inline-size: 2.75rem;
     block-size: 2.75rem;
     font-size: 2rem;

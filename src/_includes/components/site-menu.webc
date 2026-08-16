@@ -7,7 +7,11 @@
   possible by @starting-style and transition-behavior: allow-discrete; without
   those two, an element going display:none could not be animated.
 
-  Props: site, navigation, series, works (see base.webc).
+  Props: site, navigation, series, works, current (see base.webc).
+
+  `current` is the page's own URL, used to mark the active link with
+  aria-current="page" — which is what tells a screen reader user where they are
+  in the menu, and is also the hook the bold styling hangs off.
 -->
 <nav id="site-menu" class="menu" popover aria-label="Primary">
   <div class="menu__head">
@@ -19,12 +23,15 @@
   <ul class="menu__list">
     <li class="menu__section" webc:for="section of navigation">
       <a class="menu__section-link" webc:if="section.href" :href="this.url(section.href)"
+         :aria-current="this.current === section.href ? 'page' : false"
          @text="section.label"></a>
       <span class="menu__section-label" webc:else @text="section.label"></span>
 
       <ul class="menu__sub" webc:if="section.children && section.children.length">
         <li webc:for="item of section.children">
-          <a class="menu__link" :href="this.url(item.href)" @text="item.label"></a>
+          <a class="menu__link" :href="this.url(item.href)"
+             :aria-current="this.current === item.href ? 'page' : false"
+             @text="item.label"></a>
         </li>
       </ul>
 
@@ -34,7 +41,8 @@
       -->
       <ul class="menu__sub" webc:if="section.includeSeries && series.length">
         <li webc:for="entry of series">
-          <a class="menu__link" :href="this.url(entry.url)">
+          <a class="menu__link" :href="this.url(entry.url)"
+             :aria-current="this.current === entry.url ? 'page' : false">
             <span @text="entry.data.title"></span>
             <span class="menu__count"
               @text="works.filter(w => w.series === entry.data.title).length"></span>
@@ -136,25 +144,52 @@
     padding-inline-start: 0.9rem;
   }
 
+  /*
+    Colour, not opacity: nesting a 0.5-opacity count inside a 0.75-opacity link
+    multiplies to 0.375 and fails contrast. Padding gives a ~40px tap target.
+  */
   .menu__link {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    padding-block: 0.15rem;
+    padding-block: 0.5rem;
+    min-block-size: 2.5rem;
     font-size: 0.9rem;
     text-decoration: none;
-    color: inherit;
-    opacity: 0.75;
+    color: var(--ink-muted, #5a5a5a);
   }
 
   .menu__link:hover,
   .menu__link:focus-visible {
-    opacity: 1;
+    color: var(--ink, #1a1a1a);
+  }
+
+  .menu__link[aria-current='page'] {
+    color: var(--ink, #1a1a1a);
+    font-weight: 600;
   }
 
   .menu__count {
     font-variant-numeric: tabular-nums;
-    opacity: 0.5;
+    color: var(--ink-muted, #5a5a5a);
+  }
+
+  .menu__section-link {
+    min-block-size: 2.5rem;
+    display: flex;
+    align-items: center;
+  }
+
+  .menu__section-link[aria-current='page'] {
+    font-weight: 600;
+  }
+
+  .menu__close {
+    display: grid;
+    place-items: center;
+    min-inline-size: 2.75rem;
+    min-block-size: 2.75rem;
   }
 
   /* No slide for anyone who asked for less motion; it simply appears. */
