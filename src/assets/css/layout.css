@@ -9,6 +9,8 @@
   .header__title,
   .menu__title {
     font-family: var(--font-display);
+    font-variation-settings: var(--font-display-settings);
+    font-optical-sizing: auto;
   }
 
   .main {

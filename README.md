@@ -39,8 +39,10 @@ Series pages come from files in `src/content/series/`, standalone pages from
 
 ## Design
 
-Body text is Istok Web, headings Work Sans, set as `--font-body` and
-`--font-display` in `theme.css` — the only two lines that choose a typeface.
+Two faces, per the brief: one plain, one flowing. Body text is **Istok Web**, a
+plain sans with no decorative glyphs. Headings are **Fraunces**, a soft old-style
+serif run at `SOFT 60, WONK 1` so it flows rather than sits upright. Both are set
+in `theme.css` via `--font-body`, `--font-display` and `--font-display-settings`.
 
 Laid out against two references: Jérémy Rebord's Kleio site for the cover and
 work-page proportions, Daniela Keiser's for the menu hierarchy.

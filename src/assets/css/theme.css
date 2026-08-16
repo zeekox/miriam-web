@@ -1,6 +1,7 @@
 @layer theme {
   :root {
     --font-body: 'Istok Web', 'Istok Web fallback', system-ui, sans-serif;
-    --font-display: 'Work Sans', system-ui, sans-serif;
+    --font-display: 'Fraunces', 'Fraunces fallback', Georgia, serif;
+    --font-display-settings: 'SOFT' 60, 'WONK' 1;
   }
 }

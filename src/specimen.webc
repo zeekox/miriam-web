@@ -8,10 +8,10 @@ description: Three typeface pairings shown at working sizes, for choosing betwee
     <h1>Type specimen</h1>
     <p>
       Three pairings, each setting a work title beside a paragraph of running text
-      at the sizes they would actually be used. The site currently runs on Istok
-      Web with Work Sans headings; to switch, set <code>--font-display</code> and
-      <code>--font-body</code> in <code>theme.css</code> and delete the pairings
-      you did not pick.
+      at the sizes they would actually be used. The site runs on pairing A —
+      Fraunces headings over Istok Web body text; to switch, set
+      <code>--font-display</code> and <code>--font-body</code> in
+      <code>theme.css</code> and delete the pairings you did not pick.
     </p>
     <p class="specimen__note">
       All faces are self-hosted and under the Open Font License. Redaction is the
