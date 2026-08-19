@@ -28,5 +28,7 @@
       :@current="this.page.url"></site-menu>
     <main id="main" class="main" @raw="this.content"></main>
     <site-footer :@site="this.site" webc:if="this.layout_variant !== 'cover'"></site-footer>
+
+    <script :src="this.url('/assets/js/reduced-motion.js')" defer webc:keep></script>
   </body>
 </html>

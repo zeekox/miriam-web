@@ -5,6 +5,6 @@ title: null
 eleventyExcludeFromCollections: true
 ---
 <h1 class="visually-hidden" @text="this.site.title"></h1>
-<cover-slideshow webc:if="this.collections.works.length"
-                 :@works="this.collections.works"></cover-slideshow>
+<cover-slideshow webc:if="this.slides.length"
+                 :@slides="this.slides"></cover-slideshow>
 <garden-scene webc:else></garden-scene>

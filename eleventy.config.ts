@@ -3,7 +3,7 @@ import pluginWebc from '@11ty/eleventy-plugin-webc'
 import { parseWork, describeWork } from './types/content.ts'
 import type { Work, WorkEntry } from './types/content.ts'
 import { renderImage } from './src/_shortcodes/image.ts'
-import { PATH_PREFIX } from './src/_lib/path-prefix.ts'
+import { PATH_PREFIX, assetUrl } from './src/_lib/path-prefix.ts'
 import type {
   EleventyConfig,
   EleventyCollectionApi,
@@ -54,6 +54,7 @@ export default function (eleventyConfig: EleventyConfig): void {
   eleventyConfig.addPassthroughCopy({ 'src/assets/css': 'assets/css' })
   eleventyConfig.addPassthroughCopy({ 'src/assets/fonts': 'assets/fonts' })
   eleventyConfig.addPassthroughCopy({ 'src/assets/video': 'assets/video' })
+  eleventyConfig.addPassthroughCopy({ 'src/assets/js': 'assets/js' })
   eleventyConfig.addPassthroughCopy({ 'src/assets/favicon.svg': 'assets/favicon.svg' })
   eleventyConfig.addPassthroughCopy({
     'src/assets/apple-touch-icon.png': 'assets/apple-touch-icon.png',
@@ -63,6 +64,8 @@ export default function (eleventyConfig: EleventyConfig): void {
   eleventyConfig.addCollection('works', (api) => toWorkEntries(api))
 
   eleventyConfig.addAsyncShortcode('picture', renderImage as never)
+
+  eleventyConfig.addFilter('assetUrl', ((repoPath: string) => assetUrl(repoPath)) as never)
 }
 
 export const config = {

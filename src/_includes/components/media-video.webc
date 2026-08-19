@@ -1,0 +1,17 @@
+<video class="video"
+       :src="this.assetUrl(mp4)"
+       :poster="this.assetUrl(poster)"
+       :aria-label="alt"
+       :autoplay="this.autoplay ? true : false"
+       :data-pause-when-reduced="this.autoplay ? true : false"
+       muted loop playsinline controls preload="metadata" webc:keep></video>
+
+<style webc:scoped>
+  .video {
+    display: block;
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+    background: var(--ink);
+  }
+</style>

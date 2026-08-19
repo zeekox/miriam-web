@@ -1,25 +1,30 @@
 <section class="cover" aria-label="Selected works">
   <ul class="cover__track list-plain" tabindex="0" role="group" aria-label="Works, scrollable">
-    <li class="cover__slide" webc:for="(work, i) of works" :id="`slide-${i + 1}`">
+    <li class="cover__slide" webc:for="(slide, i) of slides" :id="`slide-${i + 1}`">
       <figure class="cover__figure media-cover">
-        <span webc:nokeep
-          @html="this.picture(work.image, { alt: work.alt, sizes: '100vw', className: 'cover__image', eager: i === 0 })"></span>
+        <media-video webc:if="slide.kind === 'video'"
+                     :@mp4="slide.mp4"
+                     :@poster="slide.poster"
+                     :@alt="slide.alt"
+                     :@autoplay="true"></media-video>
+        <span webc:else webc:nokeep
+          @html="this.picture(slide.src, { alt: slide.alt, sizes: '100vw', className: 'cover__image', eager: i === 0 })"></span>
+
         <figcaption class="cover__caption">
-          <a class="cover__link link-plain" :href="this.url(work.url)">
-            <span class="cover__title" @text="work.title"></span>
-            <span class="cover__meta" webc:if="work.meta" @text="work.meta"></span>
-          </a>
+          <span class="cover__title" @text="slide.alt"></span>
         </figcaption>
       </figure>
+
       <a class="cover__arrow cover__arrow--prev control link-plain"
-         :href="`#slide-${i === 0 ? works.length : i}`"
-         aria-label="Previous work">‹</a>
+         :href="`#slide-${i === 0 ? slides.length : i}`"
+         aria-label="Previous">‹</a>
       <a class="cover__arrow cover__arrow--next control link-plain"
-         :href="`#slide-${i + 2 > works.length ? 1 : i + 2}`"
-         aria-label="Next work">›</a>
+         :href="`#slide-${i + 2 > slides.length ? 1 : i + 2}`"
+         aria-label="Next">›</a>
     </li>
   </ul>
 </section>
+
 <style webc:scoped>
   .cover {
     block-size: 100dvh;
@@ -72,18 +77,8 @@
     }
   }
 
-  .cover__link {
-    display: grid;
-    gap: 0.25rem;
-  }
-
   .cover__title {
     font-size: 1.05rem;
-  }
-
-  .cover__meta {
-    font-size: 0.85rem;
-    color: var(--ink-muted);
   }
 
   .cover__arrow {

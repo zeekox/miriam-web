@@ -7,3 +7,7 @@ export function withPrefix(url: string): string {
   if (!url.startsWith('/')) return url
   return `${PATH_PREFIX}${url.replace(/^\/+/, '')}`
 }
+
+export function assetUrl(repoPath: string): string {
+  return withPrefix(repoPath.replace(/^src\/assets\//, '/assets/'))
+}
