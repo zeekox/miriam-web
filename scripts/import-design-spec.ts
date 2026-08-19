@@ -19,6 +19,8 @@ const TITLE_OVERRIDES: Record<string, string> = {
   RevolutionInBernMussVerschobenWerden: 'Revolution in Bern muss verschoben werden',
 }
 
+const CAMERA_NOISE = /^(tumblr|img|dsc|mvi|mg|_mg|screenshot|photo|foto|scan|untitled|unbenannt)/i
+
 const RASTER = new Set(['.jpg', '.jpeg', '.png', '.tif', '.tiff'])
 const IGNORED_NAMES = new Set(['.DS_Store', '.localized'])
 
@@ -48,15 +50,17 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, '')
 }
 
-function altFromFilename(name: string): string {
+function altFromFilename(name: string, workTitle: string): string {
   const base = path.basename(name, path.extname(name))
   const cleaned = titleFromName(base)
     .replace(/\bKopie\b/gi, '')
     .replace(/\bIMG\b/gi, '')
     .replace(/\bMG\b/gi, '')
+    .replace(/[_\d]+/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
-  return cleaned === '' ? base : cleaned
+  if (cleaned.length < 3 || CAMERA_NOISE.test(base)) return workTitle
+  return cleaned
 }
 
 async function listEntries(dir: string): Promise<{ files: string[]; dirs: string[] }> {
@@ -85,23 +89,29 @@ async function collectImages(
   workDir: string,
   section: Section,
   workSlug: string,
+  workTitle: string,
   group: string | undefined,
   out: ImportedImage[],
 ): Promise<void> {
   const { files, dirs } = await listEntries(workDir)
-  for (const file of files) {
+  const leadFirst = [...files].sort(
+    (a, b) =>
+      Number(slugify(path.basename(b, path.extname(b))).includes(workSlug)) -
+      Number(slugify(path.basename(a, path.extname(a))).includes(workSlug)),
+  )
+  for (const file of leadFirst) {
     const slug = slugify(path.basename(file, path.extname(file))) || 'image'
     const name = group ? `${slugify(group)}-${slug}.jpg` : `${slug}.jpg`
     const destination = path.join(ASSET_ROOT, section, workSlug, name)
     await convert(path.join(workDir, file), destination)
     out.push({
       src: destination,
-      alt: altFromFilename(file),
+      alt: altFromFilename(file, workTitle),
       ...(group === undefined ? {} : { group }),
     })
   }
   for (const dir of dirs) {
-    await collectImages(path.join(workDir, dir), section, workSlug, titleFromName(dir), out)
+    await collectImages(path.join(workDir, dir), section, workSlug, workTitle, titleFromName(dir), out)
   }
 }
 
@@ -144,7 +154,7 @@ async function importSection(folder: string, section: Section): Promise<number> 
     const workSlug = slugify(title)
     const destination = path.join(ASSET_ROOT, section, `${workSlug}.jpg`)
     await convert(path.join(sectionDir, file), destination)
-    const lead: ImportedImage = { src: destination, alt: altFromFilename(file) }
+    const lead: ImportedImage = { src: destination, alt: altFromFilename(file, title) }
     await fs.writeFile(
       path.join(CONTENT_ROOT, `${workSlug}.md`),
       workMarkdown(title, section, lead, []),
@@ -157,7 +167,7 @@ async function importSection(folder: string, section: Section): Promise<number> 
     const title = titleFromName(dir)
     const workSlug = slugify(title)
     const images: ImportedImage[] = []
-    await collectImages(path.join(sectionDir, dir), section, workSlug, undefined, images)
+    await collectImages(path.join(sectionDir, dir), section, workSlug, title, undefined, images)
     if (images.length === 0) {
       console.log(`  ${section}/${workSlug} — SKIPPED, no images`)
       continue

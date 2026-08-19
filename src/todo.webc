@@ -1,0 +1,75 @@
+---
+layout: base.webc
+title: Todo
+noindex: true
+eleventyExcludeFromCollections: true
+permalink: /todo/index.html
+---
+<div class="todo shell">
+  <h1>Todo</h1>
+
+  <p class="todo__lede prose">
+    Generated from the works themselves, so it cannot go stale. Alt text below is
+    derived from filenames — it satisfies the build but describes nothing. Replace
+    each one with a sentence about what is actually visible, then delete this page.
+  </p>
+
+  <h2>Works missing metadata</h2>
+  <table class="todo__table">
+    <thead>
+      <tr><th>Work</th><th>Section</th><th>Year</th><th>Medium</th><th>Dimensions</th></tr>
+    </thead>
+    <tbody>
+      <tr webc:for="work of this.collections.works">
+        <td><a :href="this.url(work.url)" @text="work.title"></a></td>
+        <td @text="work.section"></td>
+        <td @text="work.year ? 'ok' : 'missing'"></td>
+        <td @text="work.medium ? 'ok' : 'missing'"></td>
+        <td @text="work.dimensions ? 'ok' : 'missing'"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>Alt text to write</h2>
+  <table class="todo__table">
+    <thead>
+      <tr><th>Work</th><th>Image</th><th>Current alt</th></tr>
+    </thead>
+    <tbody>
+      <tr webc:for="row of this.altRows">
+        <td><a :href="this.url(row.url)" @text="row.title"></a></td>
+        <td class="todo__file" @text="row.file"></td>
+        <td @text="row.alt"></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<style webc:scoped>
+  .todo {
+    padding-block: 1.5rem 3rem;
+  }
+
+  .todo__lede {
+    margin-block-end: 2rem;
+  }
+
+  .todo__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    margin-block-end: 2.5rem;
+    font-size: var(--font-size-small);
+  }
+
+  .todo__table :is(th, td) {
+    text-align: start;
+    padding: 0.4rem 0.75rem 0.4rem 0;
+    border-block-end: 1px solid var(--rule);
+    vertical-align: top;
+  }
+
+  .todo__file {
+    font-family: ui-monospace, monospace;
+    color: var(--ink-muted);
+  }
+</style>

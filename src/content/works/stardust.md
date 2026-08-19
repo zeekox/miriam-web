@@ -2,16 +2,16 @@
 title: "Stardust"
 section: sculpture
 image: src/assets/works/sculpture/stardust/mg-8874.jpg
-alt: "8874"
+alt: "Stardust"
 images:
   - src: src/assets/works/sculpture/stardust/mg-8885.jpg
-    alt: "8885"
+    alt: "Stardust"
   - src: src/assets/works/sculpture/stardust/mg-8887.jpg
-    alt: "8887"
+    alt: "Stardust"
   - src: src/assets/works/sculpture/stardust/mg-8889.jpg
-    alt: "8889"
+    alt: "Stardust"
   - src: src/assets/works/sculpture/stardust/mg-8914.jpg
-    alt: "8914"
+    alt: "Stardust"
   - src: src/assets/works/sculpture/stardust/tumblr-niukoywhew1r8hm5to1-1280.jpg
-    alt: "tumblr niukoy WHEw1r8hm5to1 1280"
+    alt: "Stardust"
 ---
