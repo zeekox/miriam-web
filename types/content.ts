@@ -15,7 +15,6 @@ export const SECTIONS: readonly Section[] = ['painting', 'sculpture', 'video']
 
 export interface VideoSource {
   readonly mp4: string
-  readonly webm: string
   readonly poster: string
   readonly posterAlt: string
 }
@@ -144,7 +143,6 @@ function parseVideo(value: unknown, source: string): VideoSource | undefined {
   }
   return {
     mp4: requireString(value, 'mp4', source),
-    webm: requireString(value, 'webm', source),
     poster: requireString(value, 'poster', source),
     posterAlt: requireString(value, 'poster_alt', source),
   }
