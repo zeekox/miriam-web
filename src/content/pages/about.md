@@ -1,5 +1,5 @@
 ---
-title: Biography
+title: About
 description: Swiss artist and art educator, based in Zurich, working primarily with painting.
 ---
 

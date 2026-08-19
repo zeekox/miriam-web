@@ -21,8 +21,8 @@ const navigation: readonly NavSection[] = [
     href: '/texts/',
   },
   {
-    label: 'Biography',
-    href: '/biography/',
+    label: 'About',
+    href: '/about/',
   },
   {
     label: 'Information',
