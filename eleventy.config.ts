@@ -53,6 +53,10 @@ export default function (eleventyConfig: EleventyConfig): void {
 
   eleventyConfig.addPassthroughCopy({ 'src/assets/css': 'assets/css' })
   eleventyConfig.addPassthroughCopy({ 'src/assets/fonts': 'assets/fonts' })
+  eleventyConfig.addPassthroughCopy({ 'src/assets/favicon.svg': 'assets/favicon.svg' })
+  eleventyConfig.addPassthroughCopy({
+    'src/assets/apple-touch-icon.png': 'assets/apple-touch-icon.png',
+  })
   eleventyConfig.addWatchTarget('src/assets/css/')
 
   eleventyConfig.addCollection('works', (api) => toWorkEntries(api))

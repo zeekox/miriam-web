@@ -6,6 +6,9 @@
     <title @text="this.title ? `${this.title} — ${this.site.title}` : this.site.title"></title>
     <meta name="description" :content="this.description || this.site.description">
     <meta webc:if="this.noindex" name="robots" content="noindex" webc:keep>
+    <link rel="icon" :href="this.url('/assets/favicon.svg')" type="image/svg+xml" webc:keep>
+    <link rel="apple-touch-icon" :href="this.url('/assets/apple-touch-icon.png')" webc:keep>
+
     <link rel="stylesheet" :href="this.url('/assets/css/base.css')" webc:keep>
     <link rel="stylesheet" :href="this.url('/assets/css/fonts.css')" webc:keep>
     <link rel="stylesheet" :href="this.url('/assets/css/layout.css')" webc:keep>
