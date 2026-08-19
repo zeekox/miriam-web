@@ -17,13 +17,13 @@
              @text="item.label"></a>
         </li>
       </ul>
-      <ul class="menu__sub list-plain" webc:if="section.includeSeries && series.length">
-        <li webc:for="entry of series">
+      <ul class="menu__sub list-plain" webc:if="section.includeSections && sections.length">
+        <li webc:for="entry of sections">
           <a class="menu__link link-plain" :href="this.url(entry.url)"
              :aria-current="this.current === entry.url ? 'page' : false">
             <span @text="entry.data.title"></span>
             <span class="menu__count"
-              @text="works.filter(w => w.series === entry.data.title).length"></span>
+              @text="works.filter(w => w.section === entry.data.section).length"></span>
           </a>
         </li>
       </ul>

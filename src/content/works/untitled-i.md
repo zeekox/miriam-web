@@ -12,7 +12,7 @@ images:
     alt: Placeholder standing in for a detail of the painted surface at the lower left edge.
   - src: src/assets/works/placeholder-01-detail-b.svg
     alt: Placeholder standing in for an installation view of Untitled I hung on a white wall.
-series: Interiors
+section: painting
 order: 1
 ---
 

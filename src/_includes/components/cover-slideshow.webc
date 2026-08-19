@@ -7,8 +7,7 @@
         <figcaption class="cover__caption">
           <a class="cover__link link-plain" :href="this.url(work.url)">
             <span class="cover__title" @text="work.title"></span>
-            <span class="cover__meta"
-              @text="`${work.year} · ${work.medium} · ${work.dimensions.height_cm} × ${work.dimensions.width_cm} cm`"></span>
+            <span class="cover__meta" webc:if="work.meta" @text="work.meta"></span>
           </a>
         </figcaption>
       </figure>

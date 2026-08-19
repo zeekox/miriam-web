@@ -19,7 +19,7 @@
     <site-menu
       :@site="this.site"
       :@navigation="this.navigation"
-      :@series="this.collections.series || []"
+      :@sections="this.collections.sections || []"
       :@works="this.collections.works"
       :@current="this.page.url"></site-menu>
     <main id="main" class="main" @raw="this.content"></main>

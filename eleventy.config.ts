@@ -1,6 +1,6 @@
 import { pathToFileURL } from 'node:url'
 import pluginWebc from '@11ty/eleventy-plugin-webc'
-import { parseWork } from './types/content.ts'
+import { parseWork, describeWork } from './types/content.ts'
 import type { Work, WorkEntry } from './types/content.ts'
 import { renderImage } from './src/_shortcodes/image.ts'
 import { PATH_PREFIX } from './src/_lib/path-prefix.ts'
@@ -15,15 +15,17 @@ const WORKS_GLOB = 'src/content/works/*.md'
 function toWorkEntries(api: EleventyCollectionApi): WorkEntry[] {
   const entries = api.getFilteredByGlob(WORKS_GLOB).map((item: EleventyCollectionItem) => {
     const work: Work = parseWork(item.data, item.inputPath)
-    return { ...work, url: item.url, slug: item.fileSlug }
+    return { ...work, url: item.url, slug: item.fileSlug, meta: describeWork(work) }
   })
 
-  return entries.sort((a, b) => {
-    if (a.order !== undefined && b.order !== undefined) return a.order - b.order
-    if (a.order !== undefined) return -1
-    if (b.order !== undefined) return 1
-    return a.year - b.year
-  })
+  const rank = (value: number | undefined): number => value ?? Number.POSITIVE_INFINITY
+
+  return entries.sort(
+    (a, b) =>
+      rank(a.order) - rank(b.order) ||
+      rank(a.year) - rank(b.year) ||
+      a.title.localeCompare(b.title),
+  )
 }
 
 export default function (eleventyConfig: EleventyConfig): void {

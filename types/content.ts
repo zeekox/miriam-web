@@ -6,23 +6,37 @@ export interface Dimensions {
 export interface WorkImage {
   readonly src: string
   readonly alt: string
+  readonly group?: string
+}
+
+export type Section = 'painting' | 'sculpture' | 'video'
+
+export const SECTIONS: readonly Section[] = ['painting', 'sculpture', 'video']
+
+export interface VideoSource {
+  readonly mp4: string
+  readonly webm: string
+  readonly poster: string
+  readonly posterAlt: string
 }
 
 export interface Work {
   readonly title: string
-  readonly year: number
-  readonly medium: string
-  readonly dimensions: Dimensions
+  readonly section: Section
   readonly image: string
   readonly alt: string
+  readonly year?: number
+  readonly medium?: string
+  readonly dimensions?: Dimensions
   readonly images?: readonly WorkImage[]
-  readonly series?: string
+  readonly video?: VideoSource
   readonly order?: number
 }
 
 export interface WorkEntry extends Work {
   readonly url: string
   readonly slug: string
+  readonly meta: string
 }
 
 class ContentError extends Error {
@@ -107,12 +121,38 @@ function parseImages(value: unknown, source: string): readonly WorkImage[] | und
     if (!isRecord(entry)) {
       throw new ContentError(source, `"images[${i}]" must be a mapping of src and alt`)
     }
-
+    const group = optionalString(entry, 'group', `${source} (images[${i}])`)
     return {
       src: requireString(entry, 'src', `${source} (images[${i}])`),
       alt: requireString(entry, 'alt', `${source} (images[${i}])`),
+      ...(group === undefined ? {} : { group }),
     }
   })
+}
+
+function parseSection(value: unknown, source: string): Section {
+  if (typeof value !== 'string' || !SECTIONS.includes(value as Section)) {
+    throw new ContentError(source, `"section" must be one of ${SECTIONS.join(', ')}`)
+  }
+  return value as Section
+}
+
+function parseVideo(value: unknown, source: string): VideoSource | undefined {
+  if (value === undefined || value === null) return undefined
+  if (!isRecord(value)) {
+    throw new ContentError(source, '"video" must be a mapping when present')
+  }
+  return {
+    mp4: requireString(value, 'mp4', source),
+    webm: requireString(value, 'webm', source),
+    poster: requireString(value, 'poster', source),
+    posterAlt: requireString(value, 'poster_alt', source),
+  }
+}
+
+function optionalDimensions(value: unknown, source: string): Dimensions | undefined {
+  if (value === undefined || value === null) return undefined
+  return parseDimensions(value, source)
 }
 
 export function parseWork(raw: unknown, source: string): Work {
@@ -121,17 +161,38 @@ export function parseWork(raw: unknown, source: string): Work {
   }
   return {
     title: requireString(raw, 'title', source),
-    year: requireNumber(raw, 'year', source),
-    medium: requireString(raw, 'medium', source),
-    dimensions: parseDimensions(raw['dimensions'], source),
+    section: parseSection(raw['section'], source),
     image: requireString(raw, 'image', source),
     alt: requireString(raw, 'alt', source),
+    year: optionalNumber(raw, 'year', source),
+    medium: optionalString(raw, 'medium', source),
+    dimensions: optionalDimensions(raw['dimensions'], source),
     images: parseImages(raw['images'], source),
-    series: optionalString(raw, 'series', source),
+    video: parseVideo(raw['video'], source),
     order: optionalNumber(raw, 'order', source),
   }
 }
 
 export function aspectRatio(dimensions: Dimensions): number {
   return dimensions.widthCm / dimensions.heightCm
+}
+
+export function formatWorkMeta(
+  year: number | undefined,
+  medium: string | undefined,
+  heightCm: number | undefined,
+  widthCm: number | undefined,
+): string {
+  const size =
+    heightCm !== undefined && widthCm !== undefined ? `${heightCm} × ${widthCm} cm` : undefined
+  return [year, medium, size].filter((part) => part !== undefined && part !== '').join(' · ')
+}
+
+export function describeWork(work: Work): string {
+  return formatWorkMeta(
+    work.year,
+    work.medium,
+    work.dimensions?.heightCm,
+    work.dimensions?.widthCm,
+  )
 }

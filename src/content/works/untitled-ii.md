@@ -7,7 +7,7 @@ dimensions:
   width_cm: 120
 image: src/assets/works/placeholder-02.svg
 alt: Placeholder standing in for a photograph of Untitled II, a horizontal oil painting on canvas.
-series: Interiors
+section: painting
 order: 2
 ---
 

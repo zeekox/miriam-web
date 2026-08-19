@@ -2,6 +2,7 @@
 title: Study
 year: 2025
 medium: graphite on paper
+section: painting
 dimensions:
   height_cm: 40
   width_cm: 40

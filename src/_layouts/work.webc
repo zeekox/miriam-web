@@ -4,12 +4,11 @@ layout: base.webc
 <article class="work shell">
   <header class="work__header">
     <h1 class="work__title" @text="this.title"></h1>
-    <p class="work__meta"
-       @text="`${this.year} · ${this.medium} · ${this.dimensions.height_cm} × ${this.dimensions.width_cm} cm`"></p>
+    <p class="work__meta" webc:if="this.metaLine" @text="this.metaLine"></p>
   </header>
   <div class="work__images">
     <figure class="work__figure work__figure--lead media-fit"
-            :style="`--aspect: ${this.dimensions.width_cm / this.dimensions.height_cm}`">
+            :style="`--aspect: ${this.leadAspect}`">
       <button class="work__zoom button-plain" type="button" :popovertarget="`full-${this.page.fileSlug}`"
               :aria-label="`View ${this.title} full size`">
         <span webc:nokeep
@@ -26,7 +25,7 @@ layout: base.webc
   <div class="work__body prose" @raw="this.content"></div>
   <nav class="work__nav" aria-label="Work">
     <a :href="this.url('/works/')">All works</a>
-    <a webc:if="this.seriesUrl" :href="this.url(this.seriesUrl)" @text="this.series"></a>
+    <a webc:if="this.sectionUrl" :href="this.url(this.sectionUrl)" @text="this.sectionLabel"></a>
   </nav>
   <div class="lightbox" :id="`full-${this.page.fileSlug}`" popover
        role="dialog" aria-modal="true" :aria-label="`${this.title}, full size`">
