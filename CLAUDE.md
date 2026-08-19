@@ -59,17 +59,35 @@ never sees the filter. A hardcoded absolute path in a template works locally and
 `components` layer in `base.webc` — unlayered styles beat every layer, so without
 that wrapper components would override `theme.css`.
 
-**Series are content files** in `src/content/series/`, not pagination — see the
-permalink constraint below. The menu is derived: `src/_data/navigation.ts` holds
-only what cannot be computed, while series and their counts come from content, so
-it cannot drift.
+**Sections are content files** in `src/content/sections/` — painting, sculpture,
+video — not pagination; see the permalink constraint below. The menu is derived:
+`src/_data/navigation.ts` holds only what cannot be computed, while sections and
+their counts come from the works, so it cannot drift.
 
-**No JavaScript.** The off-canvas menu and the full-size lightbox are `popover`,
-so the browser owns the top layer, light-dismiss, Escape and focus. The cover
-slideshow is a scroll-snap track whose arrows are anchors pointing at the
-neighbouring slide's `id`, wrapping at both ends. The only `<script>` in the
-output is a declarative `speculationrules` block; the site is fully navigable with
-JS disabled. Progressive enhancement throughout — `@view-transition`,
+**Work metadata is mostly optional.** The source material arrived with no titles,
+years, media, dimensions or alt text, so only `title`, `section`, `image` and
+`alt` are required. Never assume `year`/`medium`/`dimensions` exist — build the
+metadata line with `formatWorkMeta`, which drops absent parts. `/todo/` is
+generated from the works and tracks what is still owed; alt text derived from a
+filename passes the build but describes nothing.
+
+**Assets come from `design-spec/`**, which is gitignored. `scripts/import-design-spec.ts`
+and `scripts/build-favicon.ts` are committed with their output — change the
+output by changing the script and re-running, never by hand-editing, or the two
+drift apart. Video is transcoded manually with system ffmpeg; commands are in
+`README.md`.
+
+**Almost no JavaScript.** The off-canvas menu and the full-size lightbox are
+`popover`, so the browser owns the top layer, light-dismiss, Escape and focus. The
+cover slideshow is a scroll-snap track whose arrows are anchors pointing at the
+neighbouring slide's `id`, wrapping at both ends. The site is fully navigable with
+JS disabled.
+
+There is exactly one script beyond the declarative `speculationrules` block:
+`assets/js/reduced-motion.js`, which pauses autoplaying video for
+`prefers-reduced-motion`. CSS cannot stop autoplay, and the artist chose autoplay,
+so the gate needs script. Autoplay itself is the plain HTML attribute, so JS-off
+still plays. Do not add a second script without a reason as specific as this one. Progressive enhancement throughout — `@view-transition`,
 scroll-driven animation and container queries all degrade to working HTML.
 
 **Images** go through `@11ty/eleventy-img` via the `picture` shortcode:
