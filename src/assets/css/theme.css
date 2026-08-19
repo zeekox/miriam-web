@@ -3,5 +3,16 @@
     --font-body: 'Istok Web', 'Istok Web fallback', system-ui, sans-serif;
     --font-display: 'Fraunces', 'Fraunces fallback', Georgia, serif;
     --font-display-settings: 'SOFT' 60, 'WONK' 1;
+
+    --page: #f4f3e8;
+    --surface: #f4f3e8;
+    --surface-raised: #e6dcc8;
+    --accent: #ebfc72;
+    --rule: #aec0ab;
+    --ink: #212e21;
+    --ink-muted: #4b5a4a;
+    --ink-on-image: #f4f3e8;
+    --scrim: rgb(33 46 33 / 0.32);
+    --shadow-on-image: 0 1px 2px rgb(33 46 33 / 0.45);
   }
 }
