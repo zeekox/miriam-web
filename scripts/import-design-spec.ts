@@ -21,6 +21,14 @@ const TITLE_OVERRIDES: Record<string, string> = {
 
 const CAMERA_NOISE = /^(tumblr|img|dsc|mvi|mg|_mg|screenshot|photo|foto|scan|untitled|unbenannt)/i
 
+const VIDEO_BY_WORK: Record<string, { mp4: string; poster: string; posterAlt: string }> = {
+  'love-it-store-it': {
+    mp4: 'src/assets/video/love-it-store-it.mp4',
+    poster: 'src/assets/video/love-it-store-it-poster.jpg',
+    posterAlt: 'Love It Store It',
+  },
+}
+
 const RASTER = new Set(['.jpg', '.jpeg', '.png', '.tif', '.tiff'])
 const IGNORED_NAMES = new Set(['.DS_Store', '.localized'])
 
@@ -122,6 +130,7 @@ function yamlQuote(value: string): string {
 function workMarkdown(
   title: string,
   section: Section,
+  workSlug: string,
   lead: ImportedImage,
   rest: readonly ImportedImage[],
 ): string {
@@ -132,6 +141,13 @@ function workMarkdown(
     `image: ${lead.src}`,
     `alt: ${yamlQuote(lead.alt)}`,
   ]
+  const video = VIDEO_BY_WORK[workSlug]
+  if (video) {
+    lines.push('video:')
+    lines.push(`  mp4: ${video.mp4}`)
+    lines.push(`  poster: ${video.poster}`)
+    lines.push(`  poster_alt: ${yamlQuote(video.posterAlt)}`)
+  }
   if (rest.length > 0) {
     lines.push('images:')
     for (const image of rest) {
@@ -157,7 +173,7 @@ async function importSection(folder: string, section: Section): Promise<number> 
     const lead: ImportedImage = { src: destination, alt: altFromFilename(file, title) }
     await fs.writeFile(
       path.join(CONTENT_ROOT, `${workSlug}.md`),
-      workMarkdown(title, section, lead, []),
+      workMarkdown(title, section, workSlug, lead, []),
     )
     console.log(`  ${section}/${workSlug} — 1 image`)
     count += 1
@@ -175,7 +191,7 @@ async function importSection(folder: string, section: Section): Promise<number> 
     const [lead, ...rest] = images
     await fs.writeFile(
       path.join(CONTENT_ROOT, `${workSlug}.md`),
-      workMarkdown(title, section, lead!, rest),
+      workMarkdown(title, section, workSlug, lead!, rest),
     )
     console.log(`  ${section}/${workSlug} — ${images.length} image(s)`)
     count += 1

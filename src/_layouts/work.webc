@@ -6,6 +6,13 @@ layout: base.webc
     <h1 class="work__title" @text="this.title"></h1>
     <p class="work__meta" webc:if="this.metaLine" @text="this.metaLine"></p>
   </header>
+  <media-video webc:if="this.video"
+               class="work__video"
+               :@mp4="this.video.mp4"
+               :@poster="this.video.poster"
+               :@alt="this.video.poster_alt"
+               :@autoplay="true"></media-video>
+
   <div class="work__images">
     <figure class="work__figure work__figure--lead media-fit"
             :style="`--aspect: ${this.leadAspect}`">
@@ -50,6 +57,11 @@ layout: base.webc
     margin: 0.35rem 0 0;
     font-size: var(--font-size-small);
     color: var(--ink-muted);
+  }
+
+  .work__video {
+    display: block;
+    margin-block-end: var(--images-gap);
   }
 
   .work__images {
