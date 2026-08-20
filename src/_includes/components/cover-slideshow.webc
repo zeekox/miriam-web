@@ -11,12 +11,11 @@
         <span webc:else webc:nokeep
           @html="this.picture(slide.src, { alt: slide.alt, sizes: '100vw', className: 'cover__image', eager: i === 0 })"></span>
 
-        <figcaption class="cover__caption">
-          <span class="cover__title" @text="slide.alt"></span>
-          <button webc:if="slide.kind === 'video'" class="cover__playback button-plain"
-                  type="button" data-video-toggle hidden>Pause</button>
-        </figcaption>
+        <figcaption class="visually-hidden" @text="slide.alt"></figcaption>
       </figure>
+
+      <button webc:if="slide.kind === 'video'" class="cover__playback button-plain"
+              type="button" data-video-toggle hidden>Pause</button>
 
       <a class="cover__arrow cover__arrow--prev control link-plain"
          :href="`#slide-${i === 0 ? slides.length : i}`"
@@ -62,39 +61,23 @@
     block-size: 100%;
   }
 
-  .cover__caption {
+  .cover__playback {
     position: absolute;
     inset-block-end: 1rem;
-    inset-inline: 1rem;
-    background: var(--surface);
-    color: var(--ink);
-    padding: 0.75rem 1rem;
+    inset-inline-start: 1rem;
+    z-index: 2;
+    padding-inline: 0.5rem;
+    min-block-size: var(--target-size-inline);
+    font-size: var(--font-size-small);
+    color: var(--ink-on-image);
+    text-shadow: var(--shadow-on-image);
   }
 
   @media (min-width: 48rem) {
-    .cover__caption {
+    .cover__playback {
       inset-block-end: 2rem;
       inset-inline-start: 2rem;
-      inset-inline-end: auto;
-      max-inline-size: min(28rem, calc(100% - 4rem));
     }
-  }
-
-  .cover__caption:has(.cover__playback) {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    gap: 1rem;
-  }
-
-  .cover__title {
-    font-size: 1.05rem;
-  }
-
-  .cover__playback {
-    font-size: var(--font-size-small);
-    text-decoration: underline;
-    min-block-size: var(--target-size-inline);
   }
 
   .cover__arrow {
