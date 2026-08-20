@@ -4,6 +4,8 @@ import sharp from 'sharp'
 import type { Section } from '../types/content.ts'
 
 const SPEC_ROOT = 'design-spec/Work'
+const SLIDES_ROOT = 'design-spec/Slides'
+const SLIDES_OUT = 'src/assets/slides'
 const ASSET_ROOT = 'src/assets/works'
 const CONTENT_ROOT = 'src/content/works'
 const LONGEST_EDGE = 2400
@@ -28,6 +30,19 @@ const VIDEO_BY_WORK: Record<string, { mp4: string; poster: string; posterAlt: st
     posterAlt: 'Love It Store It',
   },
 }
+
+interface SlideImport {
+  readonly source: string
+  readonly name: string
+  readonly trimThreshold?: number
+}
+
+const SLIDES: readonly SlideImport[] = [
+  { source: 'Ausstellungssituation Kopie.JPG', name: 'ausstellungssituation.jpg' },
+  { source: 'VulkanObenHintergrundNatürlich.png', name: 'vulkan.jpg', trimThreshold: 25 },
+  { source: 'Fallen Kopie.png', name: 'fallen.jpg' },
+  { source: 'tumblr_niukoyWHEw1r8hm5to1_1280.jpg', name: 'stardust-detail.jpg' },
+]
 
 const RASTER = new Set(['.jpg', '.jpeg', '.png', '.tif', '.tiff'])
 const IGNORED_NAMES = new Set(['.DS_Store', '.localized'])
@@ -83,14 +98,28 @@ async function listEntries(dir: string): Promise<{ files: string[]; dirs: string
   return { files: files.sort(), dirs: dirs.sort() }
 }
 
-async function convert(source: string, destination: string): Promise<void> {
+async function convert(
+  source: string,
+  destination: string,
+  trimThreshold?: number,
+): Promise<void> {
   await fs.mkdir(path.dirname(destination), { recursive: true })
-  await sharp(source, { failOn: 'error' })
-    .rotate()
+  const pipeline = sharp(source, { failOn: 'error' }).rotate()
+  const framed = trimThreshold === undefined ? pipeline : pipeline.trim({ threshold: trimThreshold })
+  await framed
     .resize({ width: LONGEST_EDGE, height: LONGEST_EDGE, fit: 'inside', withoutEnlargement: true })
     .withMetadata()
     .jpeg({ quality: 88, progressive: true, chromaSubsampling: '4:4:4' })
     .toFile(destination)
+}
+
+async function importSlides(): Promise<void> {
+  for (const slide of SLIDES) {
+    const destination = path.join(SLIDES_OUT, slide.name)
+    await convert(path.join(SLIDES_ROOT, slide.source), destination, slide.trimThreshold)
+    const { width, height } = await sharp(destination).metadata()
+    console.log(`  ${slide.name} — ${width}x${height}`)
+  }
 }
 
 async function collectImages(
@@ -205,4 +234,6 @@ for (const [folder, section] of Object.entries(SECTION_BY_FOLDER)) {
   console.log(`${folder} →`)
   total.push(await importSection(folder, section))
 }
+console.log('Slides →')
+await importSlides()
 console.log(`\n${total.reduce((a, b) => a + b, 0)} works imported`)
