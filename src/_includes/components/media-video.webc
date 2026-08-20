@@ -1,10 +1,13 @@
-<video class="video"
+<video :class="this.decorative ? 'video video--decorative' : 'video'"
        :src="this.assetUrl(mp4)"
        :poster="this.assetUrl(poster)"
-       :aria-label="alt"
+       :aria-label="this.decorative ? false : alt"
        :autoplay="this.autoplay ? true : false"
        :data-pause-when-reduced="this.autoplay ? true : false"
-       muted loop playsinline controls preload="metadata" webc:keep></video>
+       :controls="this.decorative ? false : true"
+       :tabindex="this.decorative ? -1 : false"
+       :aria-hidden="this.decorative ? true : false"
+       muted loop playsinline preload="metadata" webc:keep></video>
 
 <style webc:scoped>
   .video {
@@ -13,5 +16,9 @@
     block-size: 100%;
     object-fit: cover;
     background: var(--ink);
+  }
+
+  .video--decorative {
+    pointer-events: none;
   }
 </style>

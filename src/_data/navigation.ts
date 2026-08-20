@@ -24,10 +24,6 @@ const navigation: readonly NavSection[] = [
     label: 'About',
     href: '/about/',
   },
-  {
-    label: 'Information',
-    href: '/information/',
-  },
 ]
 
 export default navigation

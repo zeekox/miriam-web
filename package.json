@@ -19,5 +19,8 @@
     "@types/node": "^26.2.0",
     "potrace": "^2.1.8",
     "typescript": "^7.0.2"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true
   }
 }

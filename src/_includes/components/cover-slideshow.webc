@@ -6,12 +6,15 @@
                      :@mp4="slide.mp4"
                      :@poster="slide.poster"
                      :@alt="slide.alt"
-                     :@autoplay="true"></media-video>
+                     :@autoplay="true"
+                     :@decorative="true"></media-video>
         <span webc:else webc:nokeep
           @html="this.picture(slide.src, { alt: slide.alt, sizes: '100vw', className: 'cover__image', eager: i === 0 })"></span>
 
         <figcaption class="cover__caption">
           <span class="cover__title" @text="slide.alt"></span>
+          <button webc:if="slide.kind === 'video'" class="cover__playback button-plain"
+                  type="button" data-video-toggle hidden>Pause</button>
         </figcaption>
       </figure>
 
@@ -77,8 +80,21 @@
     }
   }
 
+  .cover__caption:has(.cover__playback) {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
   .cover__title {
     font-size: 1.05rem;
+  }
+
+  .cover__playback {
+    font-size: var(--font-size-small);
+    text-decoration: underline;
+    min-block-size: var(--target-size-inline);
   }
 
   .cover__arrow {
