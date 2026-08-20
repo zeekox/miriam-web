@@ -16,7 +16,7 @@ for (const carousel of document.querySelectorAll('[data-carousel]')) {
 
   let timer = null
   let stoppedByVisitor = false
-  let pointerInside = false
+  let focusInside = false
 
   const advance = () => {
     const width = track.clientWidth
@@ -31,24 +31,19 @@ for (const carousel of document.querySelectorAll('[data-carousel]')) {
   }
 
   const start = () => {
-    if (timer !== null || stoppedByVisitor || pointerInside || document.hidden) return
+    if (timer !== null || stoppedByVisitor || focusInside || document.hidden) return
     timer = setInterval(advance, SLIDE_INTERVAL_MS)
   }
 
-  const suspend = () => {
-    pointerInside = true
+  carousel.addEventListener('focusin', () => {
+    focusInside = true
     stop()
-  }
+  })
 
-  const resume = () => {
-    pointerInside = false
+  carousel.addEventListener('focusout', () => {
+    focusInside = false
     start()
-  }
-
-  carousel.addEventListener('pointerenter', suspend)
-  carousel.addEventListener('pointerleave', resume)
-  carousel.addEventListener('focusin', suspend)
-  carousel.addEventListener('focusout', resume)
+  })
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()))
 
   if (toggle) {
