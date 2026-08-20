@@ -86,13 +86,13 @@
     z-index: 2;
     font-size: 2.5rem;
     line-height: 1;
-    color: var(--accent);
+    color: var(--ink-on-image);
     text-shadow: 0 1px 3px var(--scrim);
   }
 
   .cover__arrow:hover,
   .cover__arrow:focus-visible {
-    color: var(--ink-on-image);
+    color: var(--accent);
   }
 
   .cover__arrow--prev {

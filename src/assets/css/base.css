@@ -42,6 +42,8 @@
     --ink-muted: #5a5a5a;
     --ink-on-image: #ffffff;
     --ink-link-hover: color-mix(in srgb, var(--ink) 75%, var(--accent));
+    --underline-thickness: 1px;
+    --underline-offset: 0.18em;
     --rule: #1a1a1a;
     --surface-raised: #ffffff;
     --accent: #ffff00;
@@ -94,8 +96,8 @@
   a {
     color: inherit;
     text-decoration: underline;
-    text-decoration-thickness: 1px;
-    text-underline-offset: 0.18em;
+    text-decoration-thickness: var(--underline-thickness);
+    text-underline-offset: var(--underline-offset);
     text-decoration-color: var(--rule);
   }
 

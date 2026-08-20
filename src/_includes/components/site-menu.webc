@@ -116,8 +116,13 @@
   }
 
   .menu__link:hover,
-  .menu__link:focus-visible {
+  .menu__link:focus-visible,
+  .menu__section-link:hover,
+  .menu__section-link:focus-visible {
     color: var(--ink);
+    text-decoration: underline;
+    text-decoration-thickness: var(--underline-thickness);
+    text-underline-offset: var(--underline-offset);
   }
 
   :is(.menu__link, .menu__section-link)[aria-current='page'] {
