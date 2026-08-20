@@ -1,5 +1,6 @@
-<section class="cover" aria-label="Selected works">
-  <ul class="cover__track list-plain" tabindex="0" role="group" aria-label="Works, scrollable">
+<section class="cover" aria-label="Selected works" data-carousel>
+  <ul class="cover__track list-plain" tabindex="0" role="group" aria-label="Works, scrollable"
+      data-carousel-track>
     <li class="cover__slide" webc:for="(slide, i) of slides" :id="`slide-${i + 1}`">
       <figure class="cover__figure media-cover">
         <media-video webc:if="slide.kind === 'video'"
@@ -14,9 +15,6 @@
         <figcaption class="visually-hidden" @text="slide.alt"></figcaption>
       </figure>
 
-      <button webc:if="slide.kind === 'video'" class="cover__playback button-plain"
-              type="button" data-video-toggle hidden>Pause</button>
-
       <a class="cover__arrow cover__arrow--prev control link-plain"
          :href="`#slide-${i === 0 ? slides.length : i}`"
          aria-label="Previous">‹</a>
@@ -25,6 +23,8 @@
          aria-label="Next">›</a>
     </li>
   </ul>
+
+  <button class="cover__playback button-plain" type="button" data-carousel-toggle hidden>Pause</button>
 </section>
 
 <style webc:scoped>
