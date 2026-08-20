@@ -1,5 +1,5 @@
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-const SLIDE_INTERVAL_MS = 5000
+const SLIDE_INTERVAL_MS = 3000
 
 for (const video of document.querySelectorAll('[data-pause-when-reduced]')) {
   if (!prefersReducedMotion) continue
@@ -9,13 +9,10 @@ for (const video of document.querySelectorAll('[data-pause-when-reduced]')) {
 
 for (const carousel of document.querySelectorAll('[data-carousel]')) {
   const track = carousel.querySelector('[data-carousel-track]')
-  const toggle = carousel.querySelector('[data-carousel-toggle]')
-  const video = carousel.querySelector('video')
   const slideCount = track.children.length
   if (prefersReducedMotion || slideCount < 2) continue
 
   let timer = null
-  let stoppedByVisitor = false
   let focusInside = false
 
   const advance = () => {
@@ -31,7 +28,7 @@ for (const carousel of document.querySelectorAll('[data-carousel]')) {
   }
 
   const start = () => {
-    if (timer !== null || stoppedByVisitor || focusInside || document.hidden) return
+    if (timer !== null || focusInside || document.hidden) return
     timer = setInterval(advance, SLIDE_INTERVAL_MS)
   }
 
@@ -45,21 +42,6 @@ for (const carousel of document.querySelectorAll('[data-carousel]')) {
     start()
   })
   document.addEventListener('visibilitychange', () => (document.hidden ? stop() : start()))
-
-  if (toggle) {
-    toggle.addEventListener('click', () => {
-      stoppedByVisitor = !stoppedByVisitor
-      toggle.textContent = stoppedByVisitor ? 'Play' : 'Pause'
-      if (stoppedByVisitor) {
-        stop()
-        video?.pause()
-      } else {
-        video?.play().catch(() => {})
-        start()
-      }
-    })
-    toggle.hidden = false
-  }
 
   start()
 }

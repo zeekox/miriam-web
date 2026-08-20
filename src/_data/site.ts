@@ -7,10 +7,10 @@ export interface SiteData {
 }
 
 const site: SiteData = {
-  title: 'Miriam',
+  title: 'Miriam Strauss',
   description: 'Paintings and drawings.',
   lang: 'en',
-  author: 'Miriam',
+  author: 'Miriam Strauss',
   url: process.env['SITE_URL'] ?? 'http://localhost:8080',
 }
 

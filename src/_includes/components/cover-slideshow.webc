@@ -10,7 +10,7 @@
                      :@autoplay="true"
                      :@decorative="true"></media-video>
         <span webc:else webc:nokeep
-          @html="this.picture(slide.src, { alt: slide.alt, sizes: '100vw', className: 'cover__image', eager: i === 0 })"></span>
+          @html="this.picture(slide.src, { alt: slide.alt, sizes: '100vw', className: 'cover__image', eager: true })"></span>
 
         <figcaption class="visually-hidden" @text="slide.alt"></figcaption>
       </figure>
@@ -24,13 +24,27 @@
     </li>
   </ul>
 
-  <button class="cover__playback button-plain" type="button" data-carousel-toggle hidden>Pause</button>
 </section>
 
 <style webc:scoped>
   .cover {
+    position: relative;
     block-size: 100dvh;
     inline-size: 100%;
+  }
+
+  .cover::before {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    z-index: 1;
+    block-size: 7rem;
+    pointer-events: none;
+  }
+
+  .cover::before {
+    inset-block-start: 0;
+    background: linear-gradient(to bottom, var(--scrim), transparent);
   }
 
   .cover__track {
@@ -65,34 +79,16 @@
     min-block-size: 0;
   }
 
-  .cover__playback {
-    position: absolute;
-    inset-block-end: 1rem;
-    inset-inline-start: 1rem;
-    z-index: 2;
-    padding-inline: 0.5rem;
-    min-block-size: var(--target-size-inline);
-    font-size: var(--font-size-small);
-    color: var(--ink-on-image);
-    text-shadow: var(--shadow-on-image);
-  }
-
-  @media (min-width: 48rem) {
-    .cover__playback {
-      inset-block-end: 2rem;
-      inset-inline-start: 2rem;
-    }
-  }
-
   .cover__arrow {
     position: absolute;
     inset-block-start: 50%;
     translate: 0 -50%;
     z-index: 2;
+    border-radius: 50%;
+    background: var(--scrim);
     font-size: 2rem;
     line-height: 1;
     color: var(--ink-on-image);
-    text-shadow: var(--shadow-on-image);
   }
 
   .cover__arrow--prev {
