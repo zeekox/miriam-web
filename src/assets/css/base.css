@@ -41,6 +41,7 @@
     --ink: #1a1a1a;
     --ink-muted: #5a5a5a;
     --ink-on-image: #ffffff;
+    --ink-link-hover: color-mix(in srgb, var(--ink) 75%, var(--accent));
     --rule: #1a1a1a;
     --surface-raised: #ffffff;
     --accent: #ffff00;
@@ -88,6 +89,28 @@
 
   :is(a, button, [role='button'], summary) {
     min-block-size: 24px;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.18em;
+    text-decoration-color: var(--rule);
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--ink-link-hover);
+    text-decoration-color: currentColor;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    a {
+      transition:
+        color 160ms ease,
+        text-decoration-color 160ms ease;
+    }
   }
 
   .shell {
