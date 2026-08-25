@@ -2,13 +2,14 @@
   "name": "miriam-art",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.24.0",
   "type": "module",
   "description": "Portfolio website for a painter. Eleventy + WebC, open web standards first.",
   "engines": {
     "node": ">=24"
   },
   "scripts": {
-    "build": "npm run typecheck && eleventy --config=eleventy.config.ts",
+    "build": "pnpm run typecheck && eleventy --config=eleventy.config.ts",
     "serve": "eleventy --config=eleventy.config.ts --serve",
     "typecheck": "tsc --noEmit"
   },
@@ -18,6 +19,7 @@
     "@11ty/eleventy-plugin-webc": "^0.11.2",
     "@types/node": "^26.2.0",
     "potrace": "^2.1.8",
+    "sharp": "^0.35.3",
     "typescript": "^7.0.2"
   },
   "allowScripts": {

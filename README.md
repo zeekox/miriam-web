@@ -4,8 +4,8 @@ A portfolio site for a painter. Eleventy + WebC, static, no client-side framewor
 
 ```sh
 nvm use
-npm install
-npm run serve
+pnpm install
+pnpm run serve
 ```
 
 ## Content

@@ -16,6 +16,7 @@ interface and cannot be committed to the repository.
 | Build | Eleventy, output to `_site/` |
 | Artifact | `actions/upload-pages-artifact` → `actions/deploy-pages` |
 | Node version | Read from `.nvmrc` |
+| Package manager | pnpm, pinned by `packageManager` in `package.json` |
 
 ## Prerequisites
 
@@ -72,18 +73,20 @@ hard-coded absolute path passes locally and fails once deployed.
 The `build` job runs:
 
 1. `actions/checkout`
-2. `actions/setup-node` with `node-version-file: .nvmrc`
-3. `npm ci`
-4. `npm run typecheck`
-5. `npx eleventy`, with `PATH_PREFIX` and `SITE_URL` from repository variables
-6. `actions/configure-pages`, then `actions/upload-pages-artifact` on `_site`
+2. `pnpm/action-setup`, which reads `packageManager` from `package.json`
+3. `actions/setup-node` with `node-version-file: .nvmrc` and `cache: pnpm` —
+   it must come after pnpm, or it cannot resolve the pnpm store to cache
+4. `pnpm install --frozen-lockfile`
+5. `pnpm run typecheck`
+6. `pnpm exec eleventy`, with `PATH_PREFIX` and `SITE_URL` from repository variables
+7. `actions/configure-pages`, then `actions/upload-pages-artifact` on `_site`
 
 The `deploy` job then runs `actions/deploy-pages` in the `github-pages`
 environment.
 
 ### Typecheck as a build gate
 
-Step 4 gates the build deliberately. Content validation is implemented in the
+Step 5 gates the build deliberately. Content validation is implemented in the
 type layer rather than as a runtime check, so a work with missing `alt` text or
 malformed `dimensions` fails here and names the offending file and field,
 instead of publishing a page with a broken or unlabelled image.
@@ -99,13 +102,13 @@ partially written deployment is never published.
 Reproduce a default build:
 
 ```sh
-npm run build
+pnpm run build
 ```
 
 Reproduce a project-page build, including the path prefix:
 
 ```sh
-PATH_PREFIX=/miriam-art/ npx eleventy --config=eleventy.config.ts
+PATH_PREFIX=/miriam-art/ pnpm exec eleventy --config=eleventy.config.ts
 ```
 
 Inspecting the output of the second command is the only reliable way to catch
@@ -118,7 +121,7 @@ prefix errors before deploying, since they are invisible in a default build.
 | Deploy step fails with a permissions or configuration error | Pages source not set to **GitHub Actions** |
 | Pages load but all CSS, fonts, and images 404 | `PATH_PREFIX` unset or incorrect for a project page |
 | Build fails at the typecheck step | Invalid content — the error names the file and field |
-| Build fails at `npm ci` | `package-lock.json` out of sync with `package.json` |
+| Build fails at `pnpm install --frozen-lockfile` | `pnpm-lock.yaml` out of sync with `package.json` |
 | Canonical URLs point at localhost | `SITE_URL` not set |
 
 ## Verification status

@@ -3,7 +3,6 @@ name: Build and deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  # Lets you re-deploy without pushing a commit.
   workflow_dispatch:
 
 permissions:
@@ -11,8 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Never let two deploys race. In-progress runs finish rather than being killed,
-# so a half-written deployment is not published.
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -23,26 +20,23 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: pnpm/action-setup@v4
+
       - uses: actions/setup-node@v4
         with:
-          # Reads .nvmrc, so CI and local can never drift apart.
           node-version-file: .nvmrc
-          cache: npm
+          cache: pnpm
 
-      - run: npm ci
+      - run: pnpm install --frozen-lockfile
 
-      # Gates the build. Content that fails validation — a work missing alt text,
-      # malformed dimensions — stops here rather than reaching the site.
       - name: Typecheck
-        run: npm run typecheck
+        run: pnpm run typecheck
 
       - name: Build
         env:
-          # Set PATH_PREFIX to "/<repo-name>/" for a project page. Leave as "/"
-          # when a custom domain points at the site.
           PATH_PREFIX: ${{ vars.PATH_PREFIX || '/' }}
           SITE_URL: ${{ vars.SITE_URL }}
-        run: npx eleventy --config=eleventy.config.ts
+        run: pnpm exec eleventy --config=eleventy.config.ts
 
       - uses: actions/configure-pages@v5
 
