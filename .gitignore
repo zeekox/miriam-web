@@ -4,3 +4,5 @@ _site/
 .DS_Store
 *.log
 design-spec
+.claude
+CLAUDE.md
