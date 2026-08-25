@@ -40,22 +40,22 @@ The alternative option, "Deploy from a branch", is incompatible with this
 workflow. `actions/deploy-pages@v4` fails when the source is not set to GitHub
 Actions, and the resulting error does not name this setting.
 
-### 3. Configure repository variables
+### 3. Path prefix — usually nothing to do
 
-Settings → Secrets and variables → Actions → **Variables**.
+The workflow derives `PATH_PREFIX` from the repository name, so a project page
+at `<username>.github.io/<repo>/` builds correctly with no configuration. For
+this repository that resolves to `/miriam-web/`, and the build logs the value it
+used.
 
-| Variable | Required | Default | Purpose |
-|---|---|---|---|
-| `PATH_PREFIX` | Project pages only | `/` | URL subpath the site is served from |
-| `SITE_URL` | No | `http://localhost:8080` | Origin used for canonical URLs |
+Override it only when the site is *not* served from a subpath — a custom domain,
+or a repository named `<username>.github.io`. In those cases set a repository
+variable under Settings → Secrets and variables → Actions → **Variables**:
 
-`PATH_PREFIX` must be set to `/<repo-name>/` — for example `/miriam-art/` —
-when the site is served from `<username>.github.io/<repo-name>/`. Both the
-leading and trailing slash are significant.
+| Variable | When | Value |
+|---|---|---|
+| `PATH_PREFIX` | Custom domain or user page | `/` |
 
-It is not needed when a custom domain is attached, or when the repository is
-named `<username>.github.io`. In those cases the site is served from the domain
-root and the default of `/` is correct.
+Both the leading and trailing slash are significant.
 
 ## Path prefix
 
@@ -78,7 +78,7 @@ The `build` job runs:
    it must come after pnpm, or it cannot resolve the pnpm store to cache
 4. `pnpm install --frozen-lockfile`
 5. `pnpm run typecheck`
-6. `pnpm exec eleventy`, with `PATH_PREFIX` and `SITE_URL` from repository variables
+6. `pnpm exec eleventy`, with `PATH_PREFIX` derived from the repository name
 7. `actions/configure-pages`, then `actions/upload-pages-artifact` on `_site`
 
 The `deploy` job then runs `actions/deploy-pages` in the `github-pages`
@@ -108,7 +108,7 @@ pnpm run build
 Reproduce a project-page build, including the path prefix:
 
 ```sh
-PATH_PREFIX=/miriam-art/ pnpm exec eleventy --config=eleventy.config.ts
+PATH_PREFIX=/miriam-web/ pnpm exec eleventy --config=eleventy.config.ts
 ```
 
 Inspecting the output of the second command is the only reliable way to catch
@@ -122,7 +122,6 @@ prefix errors before deploying, since they are invisible in a default build.
 | Pages load but all CSS, fonts, and images 404 | `PATH_PREFIX` unset or incorrect for a project page |
 | Build fails at the typecheck step | Invalid content — the error names the file and field |
 | Build fails at `pnpm install --frozen-lockfile` | `pnpm-lock.yaml` out of sync with `package.json` |
-| Canonical URLs point at localhost | `SITE_URL` not set |
 
 ## Verification status
 

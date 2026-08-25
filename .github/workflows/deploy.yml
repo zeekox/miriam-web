@@ -34,9 +34,11 @@ jobs:
 
       - name: Build
         env:
-          PATH_PREFIX: ${{ vars.PATH_PREFIX || '/' }}
-          SITE_URL: ${{ vars.SITE_URL }}
-        run: pnpm exec eleventy --config=eleventy.config.ts
+          PATH_PREFIX_OVERRIDE: ${{ vars.PATH_PREFIX }}
+        run: |
+          export PATH_PREFIX="${PATH_PREFIX_OVERRIDE:-/${GITHUB_REPOSITORY#*/}/}"
+          echo "Building with PATH_PREFIX=$PATH_PREFIX"
+          pnpm exec eleventy --config=eleventy.config.ts
 
       - uses: actions/configure-pages@v5
 
