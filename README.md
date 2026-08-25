@@ -35,10 +35,10 @@ with `video:` (`mp4`, `poster`, `poster_alt`).
 
 A missing `alt` **fails the build**, naming the file and the field.
 
-**`/todo/` lists what is still owed** — every image whose alt text is a filename
-rather than a description, and every work missing year, medium or dimensions. It
-is generated from the works, so it cannot go stale. Delete the page when it is
-empty.
+**Content still owed.** Alt text is currently derived from filenames rather than
+written, and no work has a year, medium or dimensions — the source material
+arrived without them. A filename is not a description, so the site is weaker for
+anyone using a screen reader until those are written.
 
 Section pages come from `src/content/sections/`, standalone pages from
 `src/content/pages/`. A page with `show_garden: true` renders the garden drawing.
