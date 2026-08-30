@@ -40,22 +40,24 @@ The alternative option, "Deploy from a branch", is incompatible with this
 workflow. `actions/deploy-pages@v4` fails when the source is not set to GitHub
 Actions, and the resulting error does not name this setting.
 
-### 3. Path prefix — usually nothing to do
+### 3. Path prefix
 
-The workflow derives `PATH_PREFIX` from the repository name, so a project page
-at `<username>.github.io/<repo>/` builds correctly with no configuration. For
-this repository that resolves to `/miriam-web/`, and the build logs the value it
-used.
+The site is served from a custom domain, so it lives at the domain root and
+`PATH_PREFIX` is `/`. That is the workflow default and needs no configuration.
 
-Override it only when the site is *not* served from a subpath — a custom domain,
-or a repository named `<username>.github.io`. In those cases set a repository
-variable under Settings → Secrets and variables → Actions → **Variables**:
+It only changes if the site is ever served from a subpath — a project page at
+`<username>.github.io/<repo>/`. Then set a repository variable under Settings →
+Secrets and variables → Actions → **Variables**:
 
 | Variable | When | Value |
 |---|---|---|
-| `PATH_PREFIX` | Custom domain or user page | `/` |
+| `PATH_PREFIX` | Project page on a subpath | `/<repo-name>/` |
 
 Both the leading and trailing slash are significant.
+
+No `CNAME` file is needed. GitHub's documentation is explicit that a custom
+Actions workflow neither creates nor reads one — the domain persists in the Pages
+settings.
 
 ## Path prefix
 
@@ -78,7 +80,7 @@ The `build` job runs:
    it must come after pnpm, or it cannot resolve the pnpm store to cache
 4. `pnpm install --frozen-lockfile`
 5. `pnpm run typecheck`
-6. `pnpm exec eleventy`, with `PATH_PREFIX` derived from the repository name
+6. `pnpm exec eleventy`, with `PATH_PREFIX` from the repository variable or `/`
 7. `actions/configure-pages`, then `actions/upload-pages-artifact` on `_site`
 
 The `deploy` job then runs `actions/deploy-pages` in the `github-pages`
