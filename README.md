@@ -85,8 +85,8 @@ traced.
 
 ## Status
 
-The artwork is placeholder SVG, and Texts, Biography and Information are stubs;
-swapping in real content needs no code change.
+The artwork is placeholder SVG; swapping in real photographs needs no code
+change.
 
 There is no CMS. On GitHub Pages that would need an external OAuth proxy, since
 Pages has no functions. Front matter is already Decap-shaped, so adding one later

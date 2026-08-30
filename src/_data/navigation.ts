@@ -17,10 +17,6 @@ const navigation: readonly NavSection[] = [
     includeSections: true,
   },
   {
-    label: 'Texts',
-    href: '/texts/',
-  },
-  {
     label: 'About',
     href: '/about/',
   },
